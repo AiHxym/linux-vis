@@ -119,9 +119,10 @@
                   </Menu>
               </div>
               <div id="codecontent">
-                <Card :style="{height: '100%'}">
-                  <textarea>
-                  </textarea>
+                <Card style="height: 100%">
+                  <p v-html="markdownhtml" v-highlight>
+                    int main()
+                  </p>
                 </Card>
               </div>
             </div>
@@ -130,7 +131,7 @@
             </div>
           </div>
           <div id="lower">
-            <div logger>
+            <div id="logger">
 
             </div>
 
