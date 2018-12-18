@@ -126,7 +126,7 @@
               </div>
               <div id="codecontent">
                 <Card style="height: 100%; overflow: scroll;">
-                  <pre v-highlightjs="sourcecode" class="codes"><code class="assembly">{{datas.code[0].content}}</code></pre>
+                  <pre v-highlightjs="sourcecode" class="codes"><code class="assembly">{{}}</code></pre>
                 </Card>
               </div>
             </div>
@@ -148,14 +148,7 @@
   </div>
 </template>
 <script>
-  import datas from '@/assets/mock/data.json'
-
   export default {
-    data(){
-      return{
-        datas: 'datas'
-      }
-    }
 
   }
 </script>
