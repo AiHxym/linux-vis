@@ -5,10 +5,13 @@ import App from './App'
 import router from './router'
 import iView from 'iview';
 import 'iview/dist/styles/iview.css';
+import VueHighlightJS from 'vue-highlightjs'
+import 'highlight.js/styles/default.css';
 
 Vue.use(iView);
+Vue.use(VueHighlightJS);
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
 new Vue({

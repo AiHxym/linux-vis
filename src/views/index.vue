@@ -70,6 +70,12 @@
     user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
   }
+  .codes{
+    overflow: visible;
+   }
+  pre code {
+    background-color: rgba(255,255,255,0);
+  }
 </style>
 <template>
   <div class="layout">
@@ -119,10 +125,8 @@
                   </Menu>
               </div>
               <div id="codecontent">
-                <Card style="height: 100%">
-                  <p v-html="markdownhtml" v-highlight>
-                    int main()
-                  </p>
+                <Card style="height: 100%; overflow: scroll;">
+                  <pre v-highlightjs="sourcecode" class="codes"><code class="assembly">{{}}</code></pre>
                 </Card>
               </div>
             </div>
