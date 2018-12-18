@@ -43,6 +43,10 @@
               <Icon type="ios-construct"></Icon>
               主页
             </MenuItem>
+            <MenuItem name="data">
+              <Icon type="ios-folder"></Icon>
+              查看数据
+            </MenuItem>
             <MenuItem name="about">
               <Icon type="ios-information-circle-outline"></Icon>
               关于
@@ -51,18 +55,19 @@
         </Menu>
       </Header>
       <Content :style="{padding: '0 50px'}">
-        <Breadcrumb :style="{margin: '20px 0'}">
-          <BreadcrumbItem>Home</BreadcrumbItem>
-          <BreadcrumbItem>Components</BreadcrumbItem>
-          <BreadcrumbItem>Layout</BreadcrumbItem>
-        </Breadcrumb>
-        <Card>
-          <div style="min-height: 200px;">
-            Content
+        <div id="mainview">
+          <div id="upper">
+            <div id="codeview">
+
+            </div>
+            <div id="monitor">
+
+            </div>
           </div>
-        </Card>
+
+        </div>
       </Content>
-      <Footer class="layout-footer-center">2011-2016 &copy; TalkingData</Footer>
+      <Footer class="layout-footer-center">2018 &copy; AiHxym</Footer>
     </Layout>
   </div>
 </template>
