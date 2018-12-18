@@ -1,4 +1,34 @@
-<style scoped>
+<style scoped xmlns:Card="http://www.w3.org/1999/html">
+  #mainview{
+    margin: 30px 0 30px 0;
+    height: 25cm;
+  }
+  #upper{
+    margin: 0 0 20px 0;
+    height: 60%;
+  }
+  #codeview{
+    border: aliceblue;
+    float: left;
+    width: 35%;
+    height: 15cm;
+  }
+  #codeselecter{
+    float: left;
+    width: 25%;
+    height: 100%;
+    outline: slategrey;
+  }
+  #codecontent{
+    float: left;
+    width: 75%;
+    height: 100%;
+  }
+  #monitor{
+    width: 65%;
+    height: 100%;
+    float: left;
+  }
   .layout{
     border: 1px solid #d7dde4;
     background: #f5f7f9;
@@ -28,20 +58,31 @@
   }
   .layout-footer-center{
     text-align: center;
+    background-color: #515a6e;
+    color: whitesmoke;
+  }
+  .noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
   }
 </style>
 <template>
   <div class="layout">
     <Layout>
       <Header>
-        <Menu mode="horizontal" theme="dark" active-name="1">
+        <Menu mode="horizontal" theme="dark" active-name="headernav" class="noselect">
           <div class="layout-logo">
             操作系统可视化
           </div>
           <div class="layout-nav">
             <MenuItem name="main">
               <Icon type="ios-construct"></Icon>
-              主页
+              可视化
             </MenuItem>
             <MenuItem name="data">
               <Icon type="ios-folder"></Icon>
@@ -58,11 +99,41 @@
         <div id="mainview">
           <div id="upper">
             <div id="codeview">
-
+              <div id="codeselecter">
+                  <Menu theme="dark" width="auto" style="height: 100%" class="noselect">
+                    <MenuItem name="bios">
+                      BIOS
+                    </MenuItem>
+                    <MenuItem name="bootsectcode">
+                      bootsect.S
+                    </MenuItem>
+                    <MenuItem name="setupcode">
+                      setup.S
+                    </MenuItem>
+                    <MenuItem name="headcode">
+                      head.S
+                    </MenuItem>
+                    <MenuItem name="maincode">
+                      main.c
+                    </MenuItem>
+                  </Menu>
+              </div>
+              <div id="codecontent">
+                <Card :style="{height: '100%'}">
+                  <textarea>
+                  </textarea>
+                </Card>
+              </div>
             </div>
             <div id="monitor">
 
             </div>
+          </div>
+          <div id="lower">
+            <div logger>
+
+            </div>
+
           </div>
 
         </div>
