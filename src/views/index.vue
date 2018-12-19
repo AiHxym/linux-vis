@@ -1,4 +1,4 @@
-<style scoped xmlns:Card="http://www.w3.org/1999/html">
+<style>
   #mainview{
     margin: 30px 0 30px 0;
     height: 25cm;
@@ -70,11 +70,13 @@
     user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
   }
-  .codes{
+  pre{
+    background-color: #f5f7f9;
     overflow: visible;
-   }
-  pre code {
-    background-color: rgba(255,255,255,0);
+  }
+  code{
+    background-color: #f5f7f9;
+    overflow: visible;
   }
 </style>
 <template>
@@ -110,7 +112,7 @@
                     <MenuItem name="bios">
                       BIOS
                     </MenuItem>
-                    <MenuItem name="bootsectcode">
+                    <MenuItem name="bootsectcode" @on-select="getContent">
                       bootsect.S
                     </MenuItem>
                     <MenuItem name="setupcode">
@@ -126,7 +128,7 @@
               </div>
               <div id="codecontent">
                 <Card style="height: 100%; overflow: scroll;">
-                  <pre v-highlightjs="sourcecode" class="codes"><code class="assembly">{{}}</code></pre>
+                  <pre v-highlightjs><code class="assembly">{{contents.content}}</code></pre>
                 </Card>
               </div>
             </div>
@@ -148,7 +150,19 @@
   </div>
 </template>
 <script>
+  import datas from '@/assets/mock/data.json'
   export default {
+    data(){
+      return{
+        codes: datas.code,
+        contents:  datas.code[2]
+      }
+    },
 
+    methods: {
+      getContent: function(name){
+        this.contents = this.codes[1]
+      }
+    }
   }
 </script>
