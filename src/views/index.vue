@@ -70,9 +70,9 @@
 
   #ramusage{
     display: table;
-    height: 100px;
+    height: 80px;
     width: 80%;
-    margin: 30px 10% 0 10%;
+    margin: 80px 10% 0 10%;
   }
   .layout {
     border: 1px solid #d7dde4;
@@ -171,7 +171,7 @@
               <div id="codecontent">
                 <pre v-highlightjs="content"
                      style="background-color: rgba(0, 0, 0, 0);color: #444444;overflow: visible; height: auto">
-                  <code class="assembly"
+                  <code class="assembly cpp"
                         style="background-color: rgba(0, 0, 0, 0);color: #444444;overflow: visible; height: auto"></code>
                 </pre>
               </div>
@@ -196,7 +196,11 @@
                 </div>
               </div>
               <div id="ramusage">
-                <div v-for="item in ram" style="float: left; height: 100%" :style="{width: item.size, backgroundColor: item.color}"></div>
+                <Tooltip placement="top" theme="light" v-for="item in rams" style="float: left; height: 100%" :style="{width: item.size, backgroundColor: item.color}" :key="item.name">
+                  <div slot="content">
+                    {{item.name}}
+                  </div>
+                </Tooltip>
               </div>
             </div>
           </div>
@@ -219,14 +223,16 @@
     data() {
       return {
         content: "",
-        ram: [
+        rams: [
           {
             "size": "20%",
-            "color": "red"
+            "color": "red",
+            "name": "r"
           },
           {
             "size": "80%",
-            "color": "blue"
+            "color": "blue",
+            "name": "t"
           }
         ],
         columns1: [
