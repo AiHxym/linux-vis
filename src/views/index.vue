@@ -68,26 +68,27 @@
     margin: 0 5px 0 5px;
   }
 
-  #ramusage{
+  #ramusage {
     display: table;
     height: 2cm;
     width: 80%;
-    margin: 10% 10% 10% 10%;
+    margin: 0 auto;
+
   }
 
-  #diskusage{
+  #diskusage {
     display: table;
     margin: 0 auto;
   }
 
-  #disk{
+  #disk {
     float: left;
     width: 600px;
     height: 60px;
     margin: 30px 0 30px 20px;
   }
 
-  #circle{
+  #circle {
     float: left;
   }
 
@@ -137,6 +138,10 @@
     /* Non-prefixed version, currently
                                      supported by Chrome and Opera */
   }
+
+  h2 {
+    margin: 10px 0 10px 0;
+  }
 </style>
 <template>
   <div class="layout">
@@ -144,7 +149,7 @@
       <Header>
         <Menu mode="horizontal" theme="dark" active-name="headernav" class="noselect">
           <div class="layout-logo">
-            操作系统可视化
+            <h3>操作系统可视化</h3>
           </div>
           <div class="layout-nav">
             <MenuItem name="main">
@@ -195,6 +200,7 @@
 
             </div>
             <div id="monitor">
+              <h2>寄存器数据</h2>
               <div id="register">
                 <div id="c1">
                   <Table border stripe :columns="columns1" :data="data1"></Table>
@@ -212,13 +218,16 @@
                   <Table border stripe :columns="columns5" :data="data5"></Table>
                 </div>
               </div>
+              <h2 style="margin-top: 20px">内存使用情况</h2>
               <div id="ramusage">
-                <Tooltip placement="top" theme="light" v-for="item in rams" style="float: left; height: 100%" :style="{width: item.size, backgroundColor: item.color}" :key="item.name">
+                <Tooltip placement="top" theme="light" v-for="item in rams" style="float: left; height: 100%"
+                         :style="{width: item.size, backgroundColor: item.color}" :key="item.name">
                   <div slot="content">
                     {{item.name}}
                   </div>
                 </Tooltip>
               </div>
+              <h2 style="margin-top: 30px; margin-bottom: 5px">磁盘状态</h2>
               <div id="diskusage">
                 <div id="circle">
                   <Circle :percent="percent" :stroke-color="color">
@@ -227,9 +236,12 @@
                   </Circle>
                 </div>
                 <div id="disk">
-                  <Tooltip placement="top" content="boot扇区" style="background-color: #808695; width: 10%; height: 100%; float: left;"></Tooltip>
-                  <Tooltip placement="top" content="setup模块" style="background-color: #2d8cf0; width: 40%; height: 100%; float:left;"></Tooltip>
-                  <Tooltip placement="top" content="system模块" style="background-color: #19be6b; width: 50%; height: 100%; float:left;"></Tooltip>
+                  <Tooltip placement="top" content="boot扇区"
+                           style="background-color: #808695; width: 10%; height: 100%; float: left;"></Tooltip>
+                  <Tooltip placement="top" content="setup模块"
+                           style="background-color: #2d8cf0; width: 40%; height: 100%; float:left;"></Tooltip>
+                  <Tooltip placement="top" content="system模块"
+                           style="background-color: #19be6b; width: 50%; height: 100%; float:left;"></Tooltip>
                 </div>
               </div>
             </div>
@@ -252,6 +264,7 @@
 
     data() {
       return {
+        percent: 0,
         content: "",
         rams: [
           {
@@ -367,9 +380,30 @@
         ]
       }
     },
+    computed: {
+      color() {
+        let color = '#2db7f5';
+        if (this.percent == 100) {
+          color = '#5cb85c';
+        }
+        return color;
+      }
+    },
     methods: {
       getContent(name) {
         this.content = datas.code.find(e => e.name === name).content;
+      },
+      add() {
+        if (this.percent >= 100) {
+          return false;
+        }
+        this.percent += 1;
+      },
+      minus() {
+        if (this.percent <= 0) {
+          return false;
+        }
+        this.percent -= 1;
       }
     }
   }
