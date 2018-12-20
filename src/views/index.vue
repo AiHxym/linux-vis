@@ -39,9 +39,8 @@
   }
 
   #register {
-    width: 100%;
-    height: 60%;
-    padding-left: 20%;
+    display: table;
+    margin: 0 auto;
   }
 
   #c1 {
@@ -141,7 +140,7 @@
             <div id="codeview">
               <div id="codeselecter" class="noselect">
                 <Menu theme="dark" width="auto" style="height: 100%">
-                  <MenuItem name="bios">
+                  <MenuItem name="bios" @click.native="getContent('BIOS')">
                     BIOS
                   </MenuItem>
                   <MenuItem name="bootsectcode" @click.native="getContent('bootsect.S')">
@@ -153,7 +152,7 @@
                   <MenuItem name="headcode" @click.native="getContent('head.S')">
                     head.S
                   </MenuItem>
-                  <MenuItem name="maincode">
+                  <MenuItem name="maincode" @click.native="getContent('main.c')">
                     main.c
                   </MenuItem>
                 </Menu>
@@ -205,6 +204,7 @@
   import datas from '@/assets/mock/data.json'
 
   export default {
+
     data() {
       return {
         content: "",
