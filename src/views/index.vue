@@ -33,7 +33,7 @@
 
   #monitor {
     width: 65%;
-    height: 100%;
+    height: auto;
     float: left;
     text-align: center;
   }
@@ -45,24 +45,35 @@
 
   #c1 {
     float: left;
+    margin: 0 5px 0 5px;
   }
 
   #c2 {
     float: left;
+    margin: 0 5px 0 5px;
   }
 
   #c3 {
     float: left;
+    margin: 0 5px 0 5px;
   }
 
   #c4 {
     float: left;
+    margin: 0 5px 0 5px;
   }
 
   #c5 {
     float: left;
+    margin: 0 5px 0 5px;
   }
 
+  #ramusage{
+    display: table;
+    height: 100px;
+    width: 80%;
+    margin: 30px 10% 0 10%;
+  }
   .layout {
     border: 1px solid #d7dde4;
     background: #f5f7f9;
@@ -184,16 +195,16 @@
                   <Table border stripe :columns="columns5" :data="data5"></Table>
                 </div>
               </div>
-
+              <div id="ramusage">
+                <div v-for="item in ram" style="float: left; height: 100%" :style="{width: item.size, backgroundColor: item.color}"></div>
+              </div>
             </div>
           </div>
           <div id="lower">
             <div id="logger">
-
             </div>
 
           </div>
-
         </div>
       </Content>
       <Footer class="layout-footer-center">2018 &copy; AiHxym</Footer>
@@ -208,6 +219,16 @@
     data() {
       return {
         content: "",
+        ram: [
+          {
+            "size": "20%",
+            "color": "red"
+          },
+          {
+            "size": "80%",
+            "color": "blue"
+          }
+        ],
         columns1: [
           {
             title: 'Name',
