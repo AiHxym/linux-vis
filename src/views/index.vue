@@ -9,16 +9,22 @@
     height: 60%;
   }
 
-  #leftarea{
+  #leftarea {
     float: left;
     width: 35%;
-    height: 15cm;
+    height: 24cm;
   }
 
   #codeview {
     border: aliceblue;
     width: 100%;
-    height: 90%;
+    height: 70%;
+  }
+
+  #logger {
+    margin-top: 20px;
+    height: 25%;
+    width: 100%;
   }
 
   #codeselecter {
@@ -216,6 +222,14 @@
                 </pre>
                 </div>
               </div>
+              <div id="logger">
+                <div id="loggerbar"
+                     style="width: 100%; height: 10%; background:rgba(0, 0, 0, 0.2);">
+                  <img src="./../assets/images/console.svg" alt="console" style="height: 100%; width: auto">
+                </div>
+                <textarea id="loggercontent"
+                          style="width: 100%; height: 90%; background-color: black; color: white"></textarea>
+              </div>
             </div>
             <div id="monitor">
               <h2>寄存器数据</h2>
@@ -265,8 +279,7 @@
             </div>
           </div>
           <div id="lower">
-            <div id="logger">
-            </div>
+
 
           </div>
         </div>
@@ -424,10 +437,10 @@
         }
         this.percent -= 1;
       },
-      changeIcon(){
-        if(this.iconStatus === "ios-pause") {
+      changeIcon() {
+        if (this.iconStatus === "ios-pause") {
           this.iconStatus = "ios-play";
-        } else{
+        } else {
           this.iconStatus = "ios-pause";
         }
       }
