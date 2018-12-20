@@ -9,11 +9,16 @@
     height: 60%;
   }
 
-  #codeview {
-    border: aliceblue;
+  #leftarea{
     float: left;
     width: 35%;
     height: 15cm;
+  }
+
+  #codeview {
+    border: aliceblue;
+    width: 100%;
+    height: 90%;
   }
 
   #codeselecter {
@@ -92,6 +97,11 @@
     float: left;
   }
 
+  #buttonbar {
+    margin-bottom: 10px;
+    width: 100%;
+  }
+
   .layout {
     border: 1px solid #d7dde4;
     background: #f5f7f9;
@@ -153,11 +163,11 @@
           </div>
           <div class="layout-nav">
             <MenuItem name="main">
-              <Icon type="ios-construct"></Icon>
+              <Icon type="md-desktop"></Icon>
               可视化
             </MenuItem>
             <MenuItem name="data">
-              <Icon type="ios-folder"></Icon>
+              <Icon type="md-folder"></Icon>
               查看数据
             </MenuItem>
             <MenuItem name="about">
@@ -170,34 +180,42 @@
       <Content :style="{padding: '0 50px'}">
         <div id="mainview">
           <div id="upper">
-            <div id="codeview">
-              <div id="codeselecter" class="noselect">
-                <Menu theme="dark" width="auto" style="height: 100%">
-                  <MenuItem name="bios" @click.native="getContent('BIOS')">
-                    BIOS
-                  </MenuItem>
-                  <MenuItem name="bootsectcode" @click.native="getContent('bootsect.S')">
-                    bootsect.S
-                  </MenuItem>
-                  <MenuItem name="setupcode" @click.native="getContent('setup.S')">
-                    setup.S
-                  </MenuItem>
-                  <MenuItem name="headcode" @click.native="getContent('head.S')">
-                    head.S
-                  </MenuItem>
-                  <MenuItem name="maincode" @click.native="getContent('main.c')">
-                    main.c
-                  </MenuItem>
-                </Menu>
+            <div id="leftarea">
+              <div id="buttonbar">
+                <ButtonGroup shape="circle" style="margin: 0 auto; display: table">
+                  <Button type="default" icon="ios-skip-backward"></Button>
+                  <Button type="default" icon="ios-play" v-bind:icon="iconStatus" @click="changeIcon"></Button>
+                  <Button type="default" icon="ios-skip-forward"></Button>
+                </ButtonGroup>
               </div>
-              <div id="codecontent">
+              <div id="codeview">
+                <div id="codeselecter" class="noselect">
+                  <Menu theme="dark" width="auto" style="height: 100%">
+                    <MenuItem name="bios" @click.native="getContent('BIOS')">
+                      BIOS
+                    </MenuItem>
+                    <MenuItem name="bootsectcode" @click.native="getContent('bootsect.S')">
+                      bootsect.S
+                    </MenuItem>
+                    <MenuItem name="setupcode" @click.native="getContent('setup.S')">
+                      setup.S
+                    </MenuItem>
+                    <MenuItem name="headcode" @click.native="getContent('head.S')">
+                      head.S
+                    </MenuItem>
+                    <MenuItem name="maincode" @click.native="getContent('main.c')">
+                      main.c
+                    </MenuItem>
+                  </Menu>
+                </div>
+                <div id="codecontent">
                 <pre v-highlightjs="content"
                      style="background-color: rgba(0, 0, 0, 0);color: #444444;overflow: visible; height: auto">
                   <code class="assembly cpp"
                         style="background-color: rgba(0, 0, 0, 0);color: #444444;overflow: visible; height: auto"></code>
                 </pre>
+                </div>
               </div>
-
             </div>
             <div id="monitor">
               <h2>寄存器数据</h2>
@@ -264,6 +282,7 @@
 
     data() {
       return {
+        iconStatus: "ios-play",
         percent: 0,
         content: "",
         rams: [
@@ -383,7 +402,7 @@
     computed: {
       color() {
         let color = '#2db7f5';
-        if (this.percent == 100) {
+        if (this.percent === 100) {
           color = '#5cb85c';
         }
         return color;
@@ -404,6 +423,13 @@
           return false;
         }
         this.percent -= 1;
+      },
+      changeIcon(){
+        if(this.iconStatus === "ios-pause") {
+          this.iconStatus = "ios-play";
+        } else{
+          this.iconStatus = "ios-pause";
+        }
       }
     }
   }
