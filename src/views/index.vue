@@ -70,10 +70,27 @@
 
   #ramusage{
     display: table;
-    height: 80px;
+    height: 2cm;
     width: 80%;
-    margin: 80px 10% 0 10%;
+    margin: 10% 10% 10% 10%;
   }
+
+  #diskusage{
+    display: table;
+    margin: 0 auto;
+  }
+
+  #disk{
+    float: left;
+    width: 600px;
+    height: 60px;
+    margin: 30px 0 30px 20px;
+  }
+
+  #circle{
+    float: left;
+  }
+
   .layout {
     border: 1px solid #d7dde4;
     background: #f5f7f9;
@@ -201,6 +218,19 @@
                     {{item.name}}
                   </div>
                 </Tooltip>
+              </div>
+              <div id="diskusage">
+                <div id="circle">
+                  <Circle :percent="percent" :stroke-color="color">
+                    <Icon v-if="percent == 100" type="ios-checkmark" size="60" style="color:#5cb85c"></Icon>
+                    <span v-else style="font-size:24px">{{ percent }}%</span>
+                  </Circle>
+                </div>
+                <div id="disk">
+                  <Tooltip placement="top" content="boot扇区" style="background-color: #808695; width: 10%; height: 100%; float: left;"></Tooltip>
+                  <Tooltip placement="top" content="setup模块" style="background-color: #2d8cf0; width: 40%; height: 100%; float:left;"></Tooltip>
+                  <Tooltip placement="top" content="system模块" style="background-color: #19be6b; width: 50%; height: 100%; float:left;"></Tooltip>
+                </div>
               </div>
             </div>
           </div>
