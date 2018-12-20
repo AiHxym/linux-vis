@@ -223,12 +223,19 @@
                 </div>
               </div>
               <div id="logger">
-                <div id="loggerbar"
-                     style="width: 100%; height: 10%; background:rgba(0, 0, 0, 0.2);">
-                  <img src="./../assets/images/console.svg" alt="console" style="height: 100%; width: auto">
-                </div>
-                <textarea id="loggercontent"
-                          style="width: 100%; height: 90%; background-color: black; color: white"></textarea>
+                <Tabs value="name1" style="width: 100%; height: 100%">
+                  <TabPane label="标签一" name="name1">
+                    <div id="loggerbar"
+                         style="width: 100%; height: 10%; background:rgba(0, 0, 0, 0.2);">
+                      <img src="./../assets/images/console.svg" alt="console" style="height: 100%; width: auto">
+                    </div>
+                    <textarea id="loggercontent"
+                              style="width: 100%; height: 90%; background-color: black; color: white; resize:none; "></textarea>
+                  </TabPane>
+                  <TabPane label="标签二" name="name2">标签二的内容</TabPane>
+                  <TabPane label="标签三" name="name3">标签三的内容</TabPane>
+                </Tabs>
+
               </div>
             </div>
             <div id="monitor">
