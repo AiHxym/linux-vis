@@ -173,7 +173,7 @@
               可视化
             </MenuItem>
             <MenuItem name="data">
-              <Icon type="md-folder"></Icon>
+              <Icon type="md-eye"></Icon>
               查看数据
             </MenuItem>
             <MenuItem name="about">
@@ -292,7 +292,7 @@
           </div>
         </div>
       </Content>
-      <Footer class="layout-footer-center">2018 &copy; AiHxym</Footer>
+      <Footer class="layout-footer-center">2018 Copyright &copy; AiHxym</Footer>
     </Layout>
   </div>
 </template>
