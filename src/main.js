@@ -10,6 +10,7 @@ import 'iview/dist/styles/iview.css';
 
 
 Vue.config.productionTip = false;
+Vue.config.devtools = true;
 Vue.use(VueHighlightJS);
 Vue.use(iView);
 

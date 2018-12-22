@@ -259,10 +259,11 @@
               </div>
               <h2 style="margin-top: 20px">内存使用情况</h2>
               <div id="ramusage">
-                <Tooltip placement="top" theme="light" v-for="item in rams" style="float: left; height: 100%"
+                <Tooltip placement="top" theme="dark" v-for="item in rams" style="float: left; height: 100%"
                          :style="{width: item.size, backgroundColor: item.color}" :key="item.name">
                   <div slot="content">
-                    {{item.name}}
+                    <p><h3>{{item.name}}</h3></p>
+                    <p><span>{{item.addr}}</span></p>
                   </div>
                 </Tooltip>
               </div>
@@ -296,27 +297,17 @@
   </div>
 </template>
 <script>
-  import datas from '@/assets/mock/data.json'
-
+  import datas from '@/assets/mock/data.json';
+  import Vue from  'vue';
   export default {
 
     data() {
       return {
+        decrease: 0,
         iconStatus: "ios-play",
         percent: 0,
         content: "",
-        rams: [
-          {
-            "size": "20%",
-            "color": "red",
-            "name": "r"
-          },
-          {
-            "size": "80%",
-            "color": "blue",
-            "name": "t"
-          }
-        ],
+        rams: [],
         columns1: [
           {
             title: 'Name',
@@ -329,17 +320,25 @@
         ],
         data1: [
           {
-            name: 'R1',
+            name: 'EAX',
             value: '0'
           },
           {
-            name: 'R2',
+            name: 'EBX',
+            value: '0'
+          },
+          {
+            name: 'ECX',
+            value: '0'
+          },
+          {
+            name: 'EDX',
             value: '0'
           }
         ],
         columns2: [
           {
-            title: 'Name',
+            title: 'AX',
             key: 'name'
           },
           {
@@ -449,7 +448,69 @@
           this.iconStatus = "ios-play";
         } else {
           this.iconStatus = "ios-pause";
+          setTimeout(()=> this.parseEvent(1, 0),
+          10000
+          );
+
         }
+      },
+      parseEvent(index, number) {
+        if (index === 1) {
+          var event = datas.events.bootsect[number];
+          for (let i in event.ram){
+            this.rams.push(event.ram[i]);
+          }
+          if(event.isCarry === true)
+          {
+            var cnt = 1;
+            var decrease = parseInt(event.ram[event.carry.from].size) / event.carry.times;
+            var tmp = setInterval(()=>{
+              if(cnt >= event.carry.times) {
+
+                clearInterval(tmp);
+              }
+              let size = (parseFloat(this.rams[event.carry.from - 1].size) + decrease).toString() + '%';
+              Vue.set(this.rams, event.carry.from - 1, {
+                "size": size,
+                "name": this.rams[event.carry.from - 1].name,
+                "addr": this.rams[event.carry.from - 1].addr,
+                "color": this.rams[event.carry.from - 1].color
+              });
+              size = (parseFloat(this.rams[event.carry.from].size) - decrease).toString() + '%';
+              Vue.set(this.rams, event.carry.from, {
+                "size": size,
+                "name": this.rams[event.carry.from].name,
+                "addr": this.rams[event.carry.from].addr,
+                "color": this.rams[event.carry.from].color
+              });
+              size = (parseFloat(this.rams[event.carry.to + 1].size) - decrease).toString() + '%';
+              Vue.set(this.rams, event.carry.to + 1, {
+                "size": size,
+                "name": this.rams[event.carry.to + 1].name,
+                "addr": this.rams[event.carry.to + 1].addr,
+                "color": this.rams[event.carry.to + 1].color
+              });
+              size = (parseFloat(this.rams[event.carry.to].size) + decrease).toString() + '%';
+              Vue.set(this.rams, event.carry.to, {
+                "size": size,
+                "name": this.rams[event.carry.to].name,
+                "addr": this.rams[event.carry.to].addr,
+                "color": this.rams[event.carry.to].color
+              });
+              cnt += 1;
+            },50);
+          } else {
+            for (let i in event.ram){
+              this.rams.push(event.ram[i]);
+            }
+          }
+
+        } else if (index === 2) {
+
+        } else if (index === 3) {
+
+        }
+
       }
     }
   }

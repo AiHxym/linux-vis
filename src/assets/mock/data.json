@@ -20,5 +20,168 @@
       "name": "main.c",
       "content": "/*\n *  linux/init/main.c\n *\n *  (C) 1991  Linus Torvalds\n */\n\n#define __LIBRARY__\n#include <unistd.h>\n#include <time.h>\n\n/*\n * we need this inline - forking from kernel space will result\n * in NO COPY ON WRITE (!!!), until an execve is executed. This\n * is no problem, but for the stack. This is handled by not letting\n * main() use the stack at all after fork(). Thus, no function\n * calls - which means inline code for fork too, as otherwise we\n * would use the stack upon exit from 'fork()'.\n *\n * Actually only pause and fork are needed inline, so that there\n * won't be any messing with the stack from main(), but we define\n * some others too.\n */\nstatic inline _syscall0(int,fork)\nstatic inline _syscall0(int,pause)\nstatic inline _syscall1(int,setup,void *,BIOS)\nstatic inline _syscall0(int,sync)\n\n#include <linux/tty.h>\n#include <linux/sched.h>\n#include <linux/head.h>\n#include <asm/system.h>\n#include <asm/io.h>\n\n#include <stddef.h>\n#include <stdarg.h>\n#include <unistd.h>\n#include <fcntl.h>\n#include <sys/types.h>\n\n#include <linux/fs.h>\n\n#include <string.h>\n\nstatic char printbuf[1024];\n\nextern char *strcpy();\nextern int vsprintf();\nextern void init(void);\nextern void blk_dev_init(void);\nextern void chr_dev_init(void);\nextern void hd_init(void);\nextern void floppy_init(void);\nextern void mem_init(long start, long end);\nextern long rd_init(long mem_start, int length);\nextern long kernel_mktime(struct tm * tm);\n\nstatic int sprintf(char * str, const char *fmt, ...)\n{\n\tva_list args;\n\tint i;\n\n\tva_start(args, fmt);\n\ti = vsprintf(str, fmt, args);\n\tva_end(args);\n\treturn i;\n}\n\n/*\n * This is set up by the setup-routine at boot-time\n */\n#define EXT_MEM_K (*(unsigned short *)0x90002)\n#define CON_ROWS ((*(unsigned short *)0x9000e) & 0xff)\n#define CON_COLS (((*(unsigned short *)0x9000e) & 0xff00) >> 8)\n#define DRIVE_INFO (*(struct drive_info *)0x90080)\n#define ORIG_ROOT_DEV (*(unsigned short *)0x901FC)\n#define ORIG_SWAP_DEV (*(unsigned short *)0x901FA)\n\n/*\n * Yeah, yeah, it's ugly, but I cannot find how to do this correctly\n * and this seems to work. I anybody has more info on the real-time\n * clock I'd be interested. Most of this was trial and error, and some\n * bios-listing reading. Urghh.\n */\n\n#define CMOS_READ(addr) ({ \\\noutb_p(0x80|addr,0x70); \\\ninb_p(0x71); \\\n})\n\n#define BCD_TO_BIN(val) ((val)=((val)&15) + ((val)>>4)*10)\n\nstatic void time_init(void)\n{\n\tstruct tm time;\n\n\tdo {\n\t\ttime.tm_sec = CMOS_READ(0);\n\t\ttime.tm_min = CMOS_READ(2);\n\t\ttime.tm_hour = CMOS_READ(4);\n\t\ttime.tm_mday = CMOS_READ(7);\n\t\ttime.tm_mon = CMOS_READ(8);\n\t\ttime.tm_year = CMOS_READ(9);\n\t} while (time.tm_sec != CMOS_READ(0));\n\tBCD_TO_BIN(time.tm_sec);\n\tBCD_TO_BIN(time.tm_min);\n\tBCD_TO_BIN(time.tm_hour);\n\tBCD_TO_BIN(time.tm_mday);\n\tBCD_TO_BIN(time.tm_mon);\n\tBCD_TO_BIN(time.tm_year);\n\ttime.tm_mon--;\n\tstartup_time = kernel_mktime(&time);\n}\n\nstatic long memory_end = 0;\nstatic long buffer_memory_end = 0;\nstatic long main_memory_start = 0;\nstatic char term[32];\n\nstatic char * argv_rc[] = { \"/bin/sh\", NULL };\nstatic char * envp_rc[] = { \"HOME=/\", NULL ,NULL };\n\nstatic char * argv[] = { \"-/bin/sh\",NULL };\nstatic char * envp[] = { \"HOME=/usr/root\", NULL, NULL };\n\nstruct drive_info { char dummy[32]; } drive_info;\n\nvoid main(void)\t\t/* This really IS void, no error here. */\n{\t\t\t/* The startup routine assumes (well, ...) this */\n/*\n * Interrupts are still disabled. Do necessary setups, then\n * enable them\n */\n \tROOT_DEV = ORIG_ROOT_DEV;\n \tSWAP_DEV = ORIG_SWAP_DEV;\n\tsprintf(term, \"TERM=con%dx%d\", CON_COLS, CON_ROWS);\n\tenvp[1] = term;\t\n\tenvp_rc[1] = term;\n \tdrive_info = DRIVE_INFO;\n\tmemory_end = (1<<20) + (EXT_MEM_K<<10);\n\tmemory_end &= 0xfffff000;\n\tif (memory_end > 16*1024*1024)\n\t\tmemory_end = 16*1024*1024;\n\tif (memory_end > 12*1024*1024) \n\t\tbuffer_memory_end = 4*1024*1024;\n\telse if (memory_end > 6*1024*1024)\n\t\tbuffer_memory_end = 2*1024*1024;\n\telse\n\t\tbuffer_memory_end = 1*1024*1024;\n\tmain_memory_start = buffer_memory_end;\n#ifdef RAMDISK\n\tmain_memory_start += rd_init(main_memory_start, RAMDISK*1024);\n#endif\n\tmem_init(main_memory_start,memory_end);\n\ttrap_init();\n\tblk_dev_init();\n\tchr_dev_init();\n\ttty_init();\n\ttime_init();\n\tsched_init();\n\tbuffer_init(buffer_memory_end);\n\thd_init();\n\tfloppy_init();\n\tsti();\n\tmove_to_user_mode();\n\tif (!fork()) {\t\t/* we count on this going ok */\n\t\tinit();\n\t}\n/*\n *   NOTE!!   For any other task 'pause()' would mean we have to get a\n * signal to awaken, but task0 is the sole exception (see 'schedule()')\n * as task 0 gets activated at every idle moment (when no other tasks\n * can run). For task0 'pause()' just means we go check if some other\n * task can run, and if not we return here.\n */\n\tfor(;;)\n\t\t__asm__(\"int $0x80\"::\"a\" (__NR_pause):\"ax\");\n}\n\nstatic int printf(const char *fmt, ...)\n{\n\tva_list args;\n\tint i;\n\n\tva_start(args, fmt);\n\twrite(1,printbuf,i=vsprintf(printbuf, fmt, args));\n\tva_end(args);\n\treturn i;\n}\n\nvoid init(void)\n{\n\tint pid,i;\n\n\tsetup((void *) &drive_info);\n\t(void) open(\"/dev/tty1\",O_RDWR,0);\n\t(void) dup(0);\n\t(void) dup(0);\n\tprintf(\"%d buffers = %d bytes buffer space\\n\\r\",NR_BUFFERS,\n\t\tNR_BUFFERS*BLOCK_SIZE);\n\tprintf(\"Free mem: %d bytes\\n\\r\",memory_end-main_memory_start);\n\tif (!(pid=fork())) {\n\t\tclose(0);\n\t\tif (open(\"/etc/rc\",O_RDONLY,0))\n\t\t\t_exit(1);\n\t\texecve(\"/bin/sh\",argv_rc,envp_rc);\n\t\t_exit(2);\n\t}\n\tif (pid>0)\n\t\twhile (pid != wait(&i))\n\t\t\t/* nothing */;\n\twhile (1) {\n\t\tif ((pid=fork())<0) {\n\t\t\tprintf(\"Fork failed in init\\r\\n\");\n\t\t\tcontinue;\n\t\t}\n\t\tif (!pid) {\n\t\t\tclose(0);close(1);close(2);\n\t\t\tsetsid();\n\t\t\t(void) open(\"/dev/tty1\",O_RDWR,0);\n\t\t\t(void) dup(0);\n\t\t\t(void) dup(0);\n\t\t\t_exit(execve(\"/bin/sh\",argv,envp));\n\t\t}\n\t\twhile (1)\n\t\t\tif (pid == wait(&i))\n\t\t\t\tbreak;\n\t\tprintf(\"\\n\\rchild %d died with code %04x\\n\\r\",pid,i);\n\t\tsync();\n\t}\n\t_exit(0);\t/* NOTE! _exit, not exit() */\n}\n"
     }
-  ]
+  ],
+  "events": {
+    "powerOn": [
+      {
+        "module": "startup",
+        "event": "pressButton",
+        "time": 1
+      },
+      {
+        "module": "startup",
+        "event": "initialRegister",
+        "time": 2
+      },
+      {
+        "module": "BIOS",
+        "event": "jmp",
+        "time": 3,
+        "data": {
+          "description": "从入口地址跳转到BIOS的起始地址开始执行"
+        }
+      },
+      {
+        "module": "BIOS",
+        "event": "unzip",
+        "time": 4,
+        "data": {
+          "description": "将常驻程序库解压到内存中去"
+        }
+      }
+    ],
+    "bootsect": [
+      {
+        "id": "1",
+        "event": "carryAndJump",
+        "time": 15,
+        "ram": [
+          {
+            "size": "1%",
+            "name": "中断向量表",
+            "addr": "0x00000~0x00400",
+            "color": "#BB8C44"
+          },
+          {
+            "size": "1%",
+            "name": "BIOS数据区",
+            "addr": "0x00400~0x00500",
+            "color": "#FDE74C"
+          },
+          {
+            "size": "5%",
+            "name": "Unknown1",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "1%",
+            "name": "bootsect",
+            "addr": "0x07C00~0x07E00",
+            "color": "#808695"
+          },
+          {
+            "size": "35%",
+            "name": "Unknown2",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "0%",
+            "name": "bootsect(搬运后)",
+            "addr": "0x90000~0x90200",
+            "color": "#808695"
+          },
+          {
+            "size": "21%",
+            "name": "Unknown3",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "10%",
+            "name": "显示缓冲区",
+            "addr": "0xA0000~0xC0000",
+            "color": "#FA7921"
+          },
+          {
+            "size": "13%",
+            "name": "DEVICE",
+            "addr": "0xC0000~0xF0000",
+            "color": "#E91E63"
+          },
+          {
+            "size": "13%",
+            "name": "ROM BIOS映射区",
+            "addr": "0xC0000~0xF0000",
+            "color": "#673AB7"
+          }
+        ],
+        "isCarry": true,
+        "carry": {
+          "from": 3,
+          "to": 5,
+          "times": 256
+        },
+        "console": "bootsect 把自己搬运到 0x90000，并跳转"
+      },
+      {
+        "module": "bootsect",
+        "event": "setStackPointer",
+        "time": 16,
+        "data": {
+          "ds": "0x9000",
+          "es": "0x9000",
+          "ss": "0x9000",
+          "sp": "0xff00",
+          "description": "设置堆栈栈顶指针"
+        }
+      },
+      {
+        "module": "bootsect",
+        "event": "loadSetup",
+        "time": 17,
+        "data": {
+          "dx": "0x0000",
+          "cx": "0x0002",
+          "bx": "0x0200",
+          "ax": "0x0204",
+          "to": "0x90200",
+          "description": "加载 setup 模块到 0x90200"
+        }
+      },
+      {
+        "module": "bootsect",
+        "event": "readDiskParameter",
+        "time": 18,
+        "data": {
+          "description": "读取磁盘参数"
+        }
+      },
+      {
+        "module": "bootsect",
+        "event": "printLoading",
+        "time": 19,
+        "data": {
+          "description": "Loading system …"
+        }
+      },
+      {
+        "module": "bootsect",
+        "event": "loadSystem",
+        "time": 19,
+        "data": {
+          "description": "加载 system 到 0x10000"
+        }
+      },
+      {
+        "module": "bootsect",
+        "event": "rootDeviceNumber",
+        "time": 20,
+        "data": {
+          "description": "确认根文件系统设备号"
+        }
+      }
+    ]
+  }
 }
