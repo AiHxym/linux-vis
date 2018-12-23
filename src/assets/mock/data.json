@@ -123,7 +123,7 @@
           "to": 5,
           "times": 256
         },
-        "console": "bootsect 把自己搬运到 0x90000，并跳转"
+        "console": "bootsect 把自己搬运到 0x90000，并跳转\n"
       },
       {
         "module": "bootsect",

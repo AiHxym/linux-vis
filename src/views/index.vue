@@ -230,7 +230,8 @@
                       <img src="./../assets/images/console.svg" alt="console" style="height: 100%; width: auto">
                     </div>
                     <textarea id="loggercontent"
-                              style="width: 100%; height: 90%; background-color: black; color: white; resize:none; "></textarea>
+                              style="width: 100%; height: 90%; background-color: black; color: white; resize:none; ">{{logs}}
+                    </textarea>
                   </TabPane>
                   <TabPane label="标签二" name="name2">标签二的内容</TabPane>
                   <TabPane label="标签三" name="name3">标签三的内容</TabPane>
@@ -259,7 +260,7 @@
               </div>
               <h2 style="margin-top: 20px">内存使用情况</h2>
               <div id="ramusage">
-                <Tooltip placement="top" theme="dark" v-for="item in rams" style="float: left; height: 100%"
+                <Tooltip placement="top" theme="dark" v-for="item in rams" style="float: left; height: 100%;"
                          :style="{width: item.size, backgroundColor: item.color}" :key="item.name">
                   <div slot="content">
                     <p><h3>{{item.name}}</h3></p>
@@ -303,7 +304,7 @@
 
     data() {
       return {
-        decrease: 0,
+        logs: "",
         iconStatus: "ios-play",
         percent: 0,
         content: "",
@@ -338,7 +339,7 @@
         ],
         columns2: [
           {
-            title: 'AX',
+            title: 'Name',
             key: 'name'
           },
           {
@@ -348,11 +349,19 @@
         ],
         data2: [
           {
-            name: 'R1',
+            name: 'DS',
             value: '0'
           },
           {
-            name: 'R2',
+            name: 'ES',
+            value: '0'
+          },
+          {
+            name: 'SS',
+            value: '0'
+          },
+          {
+            name: 'SP',
             value: '0'
           }
         ],
@@ -368,11 +377,11 @@
         ],
         data3: [
           {
-            name: 'R1',
+            name: 'DI',
             value: '0'
           },
           {
-            name: 'R2',
+            name: 'SI',
             value: '0'
           }
         ],
@@ -448,10 +457,7 @@
           this.iconStatus = "ios-play";
         } else {
           this.iconStatus = "ios-pause";
-          setTimeout(()=> this.parseEvent(1, 0),
-          10000
-          );
-
+          this.parseEvent(1, 0);
         }
       },
       parseEvent(index, number) {
@@ -498,13 +504,13 @@
                 "color": this.rams[event.carry.to].color
               });
               cnt += 1;
-            },50);
+            },10);
           } else {
             for (let i in event.ram){
               this.rams.push(event.ram[i]);
             }
           }
-
+          this.logs += event.console;
         } else if (index === 2) {
 
         } else if (index === 3) {
