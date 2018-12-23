@@ -22,7 +22,7 @@
     }
   ],
   "events": {
-    "powerOn": [
+    "BIOS": [
       {
         "module": "startup",
         "event": "pressButton",
@@ -557,9 +557,8 @@
       }
     ],
     "setup": [
-      {
-
-      }
+    ],
+    "head": [
     ]
   }
 }
