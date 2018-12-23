@@ -285,6 +285,7 @@
 <script>
   import datas from '@/assets/mock/data.json';
   import Vue from 'vue';
+
   var mainproc;
   export default {
     data() {
@@ -295,7 +296,7 @@
         content: "",
         rams: [],
         now: {
-          index: 0,
+          index: 1,
           number: 0,
         },
         columns1: [
@@ -401,29 +402,38 @@
       changeIcon() {
         if (this.iconStatus === "ios-pause") {
           this.iconStatus = "ios-play";
+          clearInterval(mainproc);
         } else {
           this.iconStatus = "ios-pause";
-          mainproc = setInterval(()=>{
-            if(now.index === 1){
-              
+          clearInterval(mainproc);
+          if (this.now.index === 1) {
+            this.parseEvent(1, this.now.number);
+            ++this.now.number;
+          }
+          mainproc = setInterval(() => {
+            if (this.now.index === 1) {
+              if (this.now.number < datas.events.bootsect.length) {
+                this.parseEvent(1, this.now.number);
+                ++this.now.number;
+              } else {
+                ++this.now.index;
+              }
             }
-          })
+          }, 5000);
         }
       },
       parseEvent(index, number) {
-        this.percent = 0;
         if (index === 1) {
           var event = datas.events.bootsect[number];
-          if(event.isInterrupt === true){
-            this.messageBox("触发中断",event.interruptContent);
+          if (event.isInterrupt === true) {
+            this.messageBox("触发中断", event.interruptContent);
           }
-          if(event.isChangeRegister === true){
+          if (event.isChangeRegister === true) {
             this.setRegisters(event);
           }
           if (event.isReadDisk === true) {
             this.readDisk(event);
-          }
-          else{
+          } else {
             this.setRam(event);
           }
           this.logs += event.console;
@@ -434,30 +444,33 @@
         }
 
       },
-      readDisk(event){
-        if(event.readPlace === "boot"){
+      readDisk(event) {
+        if (event.readPlace === "boot") {
           this.bootborder = "border: 2px solid red";
           var tmp = setInterval(() => {
             if (this.add() === false) {
+              this.percent = 0;
               setTimeout(() => this.setRam(event), 200);
               this.bootborder = "";
               clearInterval(tmp);
             }
           }, 50);
-        }else if(event.readPlace === "setup"){
+        } else if (event.readPlace === "setup") {
           this.setupborder = "border: 2px solid red";
           var tmp = setInterval(() => {
             if (this.add() === false) {
+              this.percent = 0;
               setTimeout(() => this.setRam(event), 200);
               this.setupborder = "";
               clearInterval(tmp);
             }
           }, 50);
 
-        }else if(event.readPlace === "system"){
+        } else if (event.readPlace === "system") {
           this.systemborder = "border: 2px solid red";
           var tmp = setInterval(() => {
             if (this.add() === false) {
+              this.percent = 0;
               setTimeout(() => this.setRam(event), 200);
               this.systemborder = "";
               clearInterval(tmp);
@@ -466,6 +479,7 @@
         }
       },
       setRam(event) {
+        this.rams = [];
         for (let i in event.ram) {
           Vue.set(this.rams, i, event.ram[i]);
         }

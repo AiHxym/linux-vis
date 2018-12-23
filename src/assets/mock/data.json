@@ -142,6 +142,7 @@
           }
         ],
         "isReadDisk": false,
+        "isInterrupt": false,
         "console": "bootsect 把自己搬运到 0x90000，并跳转\n"
       },
       {
@@ -222,6 +223,7 @@
           }
         ],
         "isReadDisk": false,
+        "isInterrupt": false,
         "console": "设置堆栈的指针\n"
       },
       {
@@ -304,7 +306,9 @@
           }
         ],
         "isReadDisk": true,
-        "readPlace": "boot",
+        "readPlace": "setup",
+        "isInterrupt": true,
+        "interruptContent": "INT 13H AH=02H：读扇区",
         "console": "加载 setup 模块到 0x90200\n"
       },
       {
@@ -379,6 +383,8 @@
           }
         ],
         "isReadDisk": false,
+        "isInterrupt": true,
+        "interruptContent": "INT 13H AH=08H：读取驱动器参数",
         "console": "获得磁盘驱动器参数（主要是每磁道的扇区数量）\n"
       },
       {
@@ -457,6 +463,8 @@
           }
         ],
         "isReadDisk": false,
+        "isInterrupt": true,
+        "interruptContent": "<p>INT 10H AH=03H：获取光标位置和形状</p><p>INT 10H AH=13H：在Teletype模式下显示字符串</p>",
         "console": "打印 “Loading system …”\n"
       },
       {
@@ -543,6 +551,8 @@
           }
         ],
         "isReadDisk": true,
+        "readPlace": "system",
+        "isInterrupt": false,
         "console": "加载 system 到 0x10000”\n"
       }
     ],
