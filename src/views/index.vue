@@ -159,18 +159,24 @@
             <h3>操作系统可视化</h3>
           </div>
           <div class="layout-nav">
-            <MenuItem name="main">
-              <Icon type="md-desktop"></Icon>
-              可视化
-            </MenuItem>
-            <MenuItem name="data">
-              <Icon type="md-eye"></Icon>
-              查看数据
-            </MenuItem>
-            <MenuItem name="about">
-              <Icon type="ios-information-circle-outline"></Icon>
-              关于
-            </MenuItem>
+            <router-link to="/">
+              <MenuItem name="main">
+                <Icon type="md-desktop"></Icon>
+                可视化
+              </MenuItem>
+            </router-link>
+            <router-link to="/datas">
+              <MenuItem name="Datas">
+                <Icon type="md-eye"></Icon>
+                查看数据
+              </MenuItem>
+            </router-link>
+            <router-link to="/about">
+              <MenuItem name="about">
+                <Icon type="ios-information-circle-outline"></Icon>
+                关于
+              </MenuItem>
+            </router-link>
           </div>
         </Menu>
       </Header>
@@ -180,9 +186,9 @@
             <div id="leftarea">
               <div id="buttonbar">
                 <ButtonGroup shape="circle" style="margin: 0 auto; display: table">
-                  <Button type="default" icon="ios-skip-backward"></Button>
-                  <Button type="default" icon="ios-play" v-bind:icon="iconStatus" @click="changeIcon"></Button>
-                  <Button type="default" icon="ios-skip-forward"></Button>
+                  <Button type="default" icon="ios-skip-backward" @click="lastStep"></Button>
+                  <Button type="default" icon="ios-play" v-bind:icon="iconStatus" @click="start"></Button>
+                  <Button type="default" icon="ios-skip-forward" @click="nextStep"></Button>
                 </ButtonGroup>
               </div>
               <div id="codeview">
@@ -215,17 +221,24 @@
               </div>
               <div id="logger">
                 <Tabs value="name1" style="width: 100%; height: 100%">
-                  <TabPane label="标签一" name="name1">
+                  <TabPane label="运行状态" name="name1">
                     <div id="loggerbar"
                          style="width: 100%; height: 10%; background:rgba(0, 0, 0, 0.2);">
                       <img src="./../assets/images/console.svg" alt="console" style="height: 100%; width: auto">
                     </div>
-                    <textarea id="loggercontent"
+                    <textarea id="loggercontent" readonly="readonly"
                               style="width: 100%; height: 90%; background-color: black; color: white; resize:none; ">{{logs}}
                     </textarea>
                   </TabPane>
-                  <TabPane label="标签二" name="name2">标签二的内容</TabPane>
-                  <TabPane label="标签三" name="name3">标签三的内容</TabPane>
+                  <TabPane label="显示器" name="name2">
+                    <div id="monibar"
+                         style="width: 100%; height: 10%; background:rgba(0, 0, 0, 0.2);">
+                      <img src="./../assets/images/console.svg" alt="console" style="height: 100%; width: auto">
+                    </div>
+                    <textarea id="monicontent"
+                              style="width: 100%; height: 90%; background-color: black; color: white; resize:none; ">{{moni}}
+                    </textarea>
+                  </TabPane>
                 </Tabs>
 
               </div>
@@ -296,7 +309,7 @@
         content: "",
         rams: [],
         now: {
-          index: 1,
+          index: 0,
           number: 0,
         },
         columns1: [
@@ -392,14 +405,29 @@
     methods: {
       getContent(name) {
         this.content = datas.code.find(e => e.name === name).content;
-      },
+        if(name === "BIOS"){
+          this.now.index = 0;
+          this.now.number = 0;
+        } else if(name === "bootsect.S") {
+          this.now.index = 1;
+          this.now.number = 0;
+        }else if(name === "setup.S"){
+          this.now.index = 2;
+          this.now.number = 0;
+        }else if(name === "head.S"){
+          this.now.index = 3;
+          this.now.number = 0;
+        }
+      }
+      ,
       add() {
         if (this.percent >= 100) {
           return false;
         }
         this.percent += 1;
-      },
-      changeIcon() {
+      }
+      ,
+      start() {
         if (this.iconStatus === "ios-pause") {
           this.iconStatus = "ios-play";
           clearInterval(mainproc);
@@ -407,8 +435,10 @@
           this.iconStatus = "ios-pause";
           clearInterval(mainproc);
           if (this.now.index === 1) {
-            this.parseEvent(1, this.now.number);
-            ++this.now.number;
+            if (this.now.number < datas.events.bootsect.length) {
+              this.parseEvent(1, this.now.number);
+              ++this.now.number;
+            }
           }
           mainproc = setInterval(() => {
             if (this.now.index === 1) {
@@ -419,7 +449,36 @@
                 ++this.now.index;
               }
             }
-          }, 5000);
+          }, 8000);
+        }
+      }
+      ,
+      nextStep() {
+        if (this.now.index === 1) {
+          if (this.now.number < datas.events.bootsect.length) {
+            this.parseEvent(1, this.now.number);
+            ++this.now.number;
+          } else {
+            this.now.index = 2;
+            this.now.number = 0;
+          }
+        } else if (this.now.index === 2) {
+          if (this.now.number < datas.events.setup.length) {
+            this.parseEvent(2, this.now.number);
+            ++this.now.number;
+          } else {
+            this.now.index = 3;
+            this.now.number = 0;
+          }
+        } else if (this.now.index === 3) {
+          if (this.now.number < datas.events.setup.length) {
+            this.parseEvent(3, this.now.number);
+            ++this.now.number;
+          } else {
+            this.now.index = 0;
+            this.now.number = 0;
+            this.messageBox("提示", "已运行至结尾");
+          }
         }
       },
       parseEvent(index, number) {
@@ -443,7 +502,8 @@
 
         }
 
-      },
+      }
+      ,
       readDisk(event) {
         if (event.readPlace === "boot") {
           this.bootborder = "border: 2px solid red";
@@ -477,7 +537,8 @@
             }
           }, 50);
         }
-      },
+      }
+      ,
       setRam(event) {
         this.rams = [];
         for (let i in event.ram) {
@@ -521,7 +582,8 @@
             cnt += 1;
           }, 10);
         }
-      },
+      }
+      ,
       setRegisters(event) {
         if (event.isChangeRegister === true) {
           for (let i in event.registers) {
@@ -544,7 +606,8 @@
             }
           }
         }
-      },
+      }
+      ,
       messageBox(title, content) {
         this.$Modal.info({
           title: title,
