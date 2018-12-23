@@ -405,16 +405,16 @@
     methods: {
       getContent(name) {
         this.content = datas.code.find(e => e.name === name).content;
-        if(name === "BIOS"){
+        if (name === "BIOS") {
           this.now.index = 0;
           this.now.number = 0;
-        } else if(name === "bootsect.S") {
+        } else if (name === "bootsect.S") {
           this.now.index = 1;
           this.now.number = 0;
-        }else if(name === "setup.S"){
+        } else if (name === "setup.S") {
           this.now.index = 2;
           this.now.number = 0;
-        }else if(name === "head.S"){
+        } else if (name === "head.S") {
           this.now.index = 3;
           this.now.number = 0;
         }
@@ -454,7 +454,15 @@
       }
       ,
       nextStep() {
-        if (this.now.index === 1) {
+        if (this.now.index === 0) {
+          if (this.now.number < datas.events.BIOS.length) {
+            this.parseEvent(0, this.now.number);
+            ++this.now.number;
+          } else {
+            this.now.index = 2;
+            this.now.number = 0;
+          }
+        } else if (this.now.index === 1) {
           if (this.now.number < datas.events.bootsect.length) {
             this.parseEvent(1, this.now.number);
             ++this.now.number;
@@ -471,13 +479,49 @@
             this.now.number = 0;
           }
         } else if (this.now.index === 3) {
-          if (this.now.number < datas.events.setup.length) {
+          if (this.now.number < datas.events.head.length) {
             this.parseEvent(3, this.now.number);
             ++this.now.number;
           } else {
             this.now.index = 0;
             this.now.number = 0;
             this.messageBox("提示", "已运行至结尾");
+          }
+        }
+      },
+      lastStep() {
+        if (this.now.index === 0) {
+          if (this.now.number >= 0) {
+            this.parseEvent(0, this.now.number);
+            --this.now.number;
+          } else {
+            this.now.index = 0;
+            this.now.number = 0;
+            this.messageBox("提示", "已经在最开始部分");
+          }
+        } else if (this.now.index === 1) {
+          if (this.now.number >= 0) {
+            this.parseEvent(1, this.now.number);
+            --this.now.number;
+          } else {
+            this.now.index = 0;
+            this.now.number = datas.events.BIOS.length - 1;
+          }
+        } else if (this.now.index === 2) {
+          if (this.now.number >= 0) {
+            this.parseEvent(2, this.now.number);
+            --this.now.number;
+          } else {
+            this.now.index = 1;
+            this.now.number = datas.events.bootsect.length - 1;
+          }
+        } else if (this.now.index === 3) {
+          if (this.now.number >= 0) {
+            this.parseEvent(3, this.now.number);
+            --this.now.number;
+          } else {
+            this.now.index = 2;
+            this.now.number = datas.events.setup.length;
           }
         }
       },
