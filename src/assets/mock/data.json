@@ -112,7 +112,7 @@
           {
             "size": "13%",
             "name": "ROM BIOS映射区",
-            "addr": "0xC0000~0xF0000",
+            "addr": "0xF0000~0x100000",
             "color": "#673AB7"
           }
         ],
@@ -141,6 +141,7 @@
             "value": "0x00009000"
           }
         ],
+        "isReadDisk": false,
         "console": "bootsect 把自己搬运到 0x90000，并跳转\n"
       },
       {
@@ -192,7 +193,7 @@
           {
             "size": "13%",
             "name": "ROM BIOS映射区",
-            "addr": "0xC0000~0xF0000",
+            "addr": "0xF0000~0x100000",
             "color": "#673AB7"
           }
         ],
@@ -220,6 +221,7 @@
             "value": "0x00009000"
           }
         ],
+        "isReadDisk": false,
         "console": "设置堆栈的指针\n"
       },
       {
@@ -277,7 +279,7 @@
           {
             "size": "13%",
             "name": "ROM BIOS映射区",
-            "addr": "0xC0000~0xF0000",
+            "addr": "0xF0000~0x100000",
             "color": "#673AB7"
           }
         ],
@@ -302,6 +304,7 @@
           }
         ],
         "isReadDisk": true,
+        "readPlace": "boot",
         "console": "加载 setup 模块到 0x90200\n"
       },
       {
@@ -359,7 +362,7 @@
           {
             "size": "13%",
             "name": "ROM BIOS映射区",
-            "addr": "0xC0000~0xF0000",
+            "addr": "0xF0000~0x100000",
             "color": "#673AB7"
           }
         ],
@@ -433,7 +436,7 @@
           {
             "size": "13%",
             "name": "ROM BIOS映射区",
-            "addr": "0xC0000~0xF0000",
+            "addr": "0xF0000~0x100000",
             "color": "#673AB7"
           }
         ],
@@ -523,7 +526,7 @@
           {
             "size": "13%",
             "name": "ROM BIOS映射区",
-            "addr": "0xC0000~0xF0000",
+            "addr": "0xF0000~0x100000",
             "color": "#673AB7"
           }
         ],

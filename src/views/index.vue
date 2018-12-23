@@ -234,7 +234,7 @@
               <h2>寄存器数据</h2>
               <div id="register">
                 <div id="c1">
-                  <Table width="210" border stripe :columns="columns1" :data="data1" ></Table>
+                  <Table width="210" border stripe :columns="columns1" :data="data1"></Table>
                 </div>
                 <div id="c2">
                   <Table width="210" border stripe :columns="columns2" :data="data2"></Table>
@@ -262,12 +262,12 @@
                   </Circle>
                 </div>
                 <div id="disk">
-                  <Tooltip placement="top" content="boot扇区"
-                           style="background-color: #808695; width: 10%; height: 100%; float: left;"></Tooltip>
-                  <Tooltip placement="top" content="setup模块"
-                           style="background-color: #2d8cf0; width: 40%; height: 100%; float:left;"></Tooltip>
-                  <Tooltip placement="top" content="system模块"
-                           style="background-color: #19be6b; width: 50%; height: 100%; float:left;"></Tooltip>
+                  <Tooltip v-bind:style="bootborder" placement="top" content="boot扇区"
+                           style="background-color: #808695; width: 9.5%; height: 100%; float: left;"></Tooltip>
+                  <Tooltip v-bind:style="setupborder" placement="top" content="setup模块"
+                           style="background-color: #2d8cf0; width: 39.5%; height: 100%; float:left;"></Tooltip>
+                  <Tooltip v-bind:style="systemborder" placement="top" content="system模块"
+                           style="background-color: #19be6b; width: 49.5%; height: 100%; float:left;"></Tooltip>
                 </div>
               </div>
             </div>
@@ -285,9 +285,8 @@
 <script>
   import datas from '@/assets/mock/data.json';
   import Vue from 'vue';
-
+  var mainproc;
   export default {
-
     data() {
       return {
         logs: "",
@@ -375,6 +374,9 @@
             value: '0'
           }
         ],
+        bootborder: "",
+        setupborder: "",
+        systemborder: "",
       }
     },
     computed: {
@@ -387,7 +389,6 @@
       }
     },
     methods: {
-
       getContent(name) {
         this.content = datas.code.find(e => e.name === name).content;
       },
@@ -397,25 +398,34 @@
         }
         this.percent += 1;
       },
-      minus() {
-        if (this.percent <= 0) {
-          return false;
-        }
-        this.percent -= 1;
-      },
       changeIcon() {
         if (this.iconStatus === "ios-pause") {
           this.iconStatus = "ios-play";
         } else {
           this.iconStatus = "ios-pause";
-          this.parseEvent(1, 2);
+          mainproc = setInterval(()=>{
+            if(now.index === 1){
+              
+            }
+          })
         }
       },
       parseEvent(index, number) {
+        this.percent = 0;
         if (index === 1) {
           var event = datas.events.bootsect[number];
-          this.setRam(event);
-          this.setRegisters(event);
+          if(event.isInterrupt === true){
+            this.messageBox("触发中断",event.interruptContent);
+          }
+          if(event.isChangeRegister === true){
+            this.setRegisters(event);
+          }
+          if (event.isReadDisk === true) {
+            this.readDisk(event);
+          }
+          else{
+            this.setRam(event);
+          }
           this.logs += event.console;
         } else if (index === 2) {
 
@@ -424,7 +434,38 @@
         }
 
       },
-      setRam(event){
+      readDisk(event){
+        if(event.readPlace === "boot"){
+          this.bootborder = "border: 2px solid red";
+          var tmp = setInterval(() => {
+            if (this.add() === false) {
+              setTimeout(() => this.setRam(event), 200);
+              this.bootborder = "";
+              clearInterval(tmp);
+            }
+          }, 50);
+        }else if(event.readPlace === "setup"){
+          this.setupborder = "border: 2px solid red";
+          var tmp = setInterval(() => {
+            if (this.add() === false) {
+              setTimeout(() => this.setRam(event), 200);
+              this.setupborder = "";
+              clearInterval(tmp);
+            }
+          }, 50);
+
+        }else if(event.readPlace === "system"){
+          this.systemborder = "border: 2px solid red";
+          var tmp = setInterval(() => {
+            if (this.add() === false) {
+              setTimeout(() => this.setRam(event), 200);
+              this.systemborder = "";
+              clearInterval(tmp);
+            }
+          }, 50);
+        }
+      },
+      setRam(event) {
         for (let i in event.ram) {
           Vue.set(this.rams, i, event.ram[i]);
         }
@@ -467,7 +508,7 @@
           }, 10);
         }
       },
-      setRegisters(event){
+      setRegisters(event) {
         if (event.isChangeRegister === true) {
           for (let i in event.registers) {
             var inx = 0;
