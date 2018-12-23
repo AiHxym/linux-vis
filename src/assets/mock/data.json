@@ -54,7 +54,6 @@
       {
         "id": "1",
         "event": "carryAndJump",
-        "time": 15,
         "ram": [
           {
             "size": "1%",
@@ -75,7 +74,7 @@
             "color": "#B2EBF2"
           },
           {
-            "size": "1%",
+            "size": "2%",
             "name": "bootsect",
             "addr": "0x07C00~0x07E00",
             "color": "#808695"
@@ -93,7 +92,7 @@
             "color": "#808695"
           },
           {
-            "size": "21%",
+            "size": "20%",
             "name": "Unknown3",
             "addr": "",
             "color": "#B2EBF2"
@@ -123,64 +122,430 @@
           "to": 5,
           "times": 256
         },
+        "isChangeRegister": true,
+        "registers": [
+          {
+            "name": "DS",
+            "value": "0X07C0"
+          },
+          {
+            "name": "ES",
+            "value": "0x9000"
+          },
+          {
+            "name": "ECX",
+            "value": "0x00000100"
+          },
+          {
+            "name": "EAX",
+            "value": "0x00009000"
+          }
+        ],
         "console": "bootsect 把自己搬运到 0x90000，并跳转\n"
       },
       {
-        "module": "bootsect",
+        "id": "2",
         "event": "setStackPointer",
-        "time": 16,
-        "data": {
-          "ds": "0x9000",
-          "es": "0x9000",
-          "ss": "0x9000",
-          "sp": "0xff00",
-          "description": "设置堆栈栈顶指针"
-        }
+        "ram": [
+          {
+            "size": "1%",
+            "name": "中断向量表",
+            "addr": "0x00000~0x00400",
+            "color": "#BB8C44"
+          },
+          {
+            "size": "1%",
+            "name": "BIOS数据区",
+            "addr": "0x00400~0x00500",
+            "color": "#FDE74C"
+          },
+          {
+            "size": "40%",
+            "name": "Unknown1",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "2%",
+            "name": "bootsect",
+            "addr": "0x90000~0x90200",
+            "color": "#808695"
+          },
+          {
+            "size": "20%",
+            "name": "Unknown2",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "10%",
+            "name": "显示缓冲区",
+            "addr": "0xA0000~0xC0000",
+            "color": "#FA7921"
+          },
+          {
+            "size": "13%",
+            "name": "DEVICE",
+            "addr": "0xC0000~0xF0000",
+            "color": "#E91E63"
+          },
+          {
+            "size": "13%",
+            "name": "ROM BIOS映射区",
+            "addr": "0xC0000~0xF0000",
+            "color": "#673AB7"
+          }
+        ],
+        "isCarry": false,
+        "isChangeRegister": true,
+        "registers": [
+          {
+            "name": "DS",
+            "value": "0x9000"
+          },
+          {
+            "name": "ES",
+            "value": "0x9000"
+          },
+          {
+            "name": "SS",
+            "value": "0x9000"
+          },
+          {
+            "name": "SP",
+            "value": "0xFF00"
+          },
+          {
+            "name": "EAX",
+            "value": "0x00009000"
+          }
+        ],
+        "console": "设置堆栈的指针\n"
       },
       {
-        "module": "bootsect",
+        "id": "3",
         "event": "loadSetup",
-        "time": 17,
-        "data": {
-          "dx": "0x0000",
-          "cx": "0x0002",
-          "bx": "0x0200",
-          "ax": "0x0204",
-          "to": "0x90200",
-          "description": "加载 setup 模块到 0x90200"
-        }
+        "ram": [
+          {
+            "size": "1%",
+            "name": "中断向量表",
+            "addr": "0x00000~0x00400",
+            "color": "#BB8C44"
+          },
+          {
+            "size": "1%",
+            "name": "BIOS数据区",
+            "addr": "0x00400~0x00500",
+            "color": "#FDE74C"
+          },
+          {
+            "size": "40%",
+            "name": "Unknown1",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "2%",
+            "name": "bootsect",
+            "addr": "0x90000~0x90200",
+            "color": "#808695"
+          },
+          {
+            "size": "8%",
+            "name": "setup",
+            "addr": "0x90200~0x90A00",
+            "color": "#2D8CF0"
+          },
+          {
+            "size": "12%",
+            "name": "Unknown2",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "10%",
+            "name": "显示缓冲区",
+            "addr": "0xA0000~0xC0000",
+            "color": "#FA7921"
+          },
+          {
+            "size": "13%",
+            "name": "DEVICE",
+            "addr": "0xC0000~0xF0000",
+            "color": "#E91E63"
+          },
+          {
+            "size": "13%",
+            "name": "ROM BIOS映射区",
+            "addr": "0xC0000~0xF0000",
+            "color": "#673AB7"
+          }
+        ],
+        "isCarry": false,
+        "isChangeRegister": true,
+        "registers": [
+          {
+            "name": "EDX",
+            "value": "0x00000000"
+          },
+          {
+            "name": "ECX",
+            "value": "0x00000002"
+          },
+          {
+            "name": "EBX",
+            "value": "0x00000200"
+          },
+          {
+            "name": "EAX",
+            "value": "0x00000204"
+          }
+        ],
+        "isReadDisk": true,
+        "console": "加载 setup 模块到 0x90200\n"
       },
       {
-        "module": "bootsect",
-        "event": "readDiskParameter",
-        "time": 18,
-        "data": {
-          "description": "读取磁盘参数"
-        }
+        "id": "4",
+        "event": "getDiskParameter",
+        "ram": [
+          {
+            "size": "1%",
+            "name": "中断向量表",
+            "addr": "0x00000~0x00400",
+            "color": "#BB8C44"
+          },
+          {
+            "size": "1%",
+            "name": "BIOS数据区",
+            "addr": "0x00400~0x00500",
+            "color": "#FDE74C"
+          },
+          {
+            "size": "40%",
+            "name": "Unknown1",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "2%",
+            "name": "bootsect",
+            "addr": "0x90000~0x90200",
+            "color": "#808695"
+          },
+          {
+            "size": "8%",
+            "name": "setup",
+            "addr": "0x90200~0x90A00",
+            "color": "#2D8CF0"
+          },
+          {
+            "size": "12%",
+            "name": "Unknown2",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "10%",
+            "name": "显示缓冲区",
+            "addr": "0xA0000~0xC0000",
+            "color": "#FA7921"
+          },
+          {
+            "size": "13%",
+            "name": "DEVICE",
+            "addr": "0xC0000~0xF0000",
+            "color": "#E91E63"
+          },
+          {
+            "size": "13%",
+            "name": "ROM BIOS映射区",
+            "addr": "0xC0000~0xF0000",
+            "color": "#673AB7"
+          }
+        ],
+        "isCarry": false,
+        "isChangeRegister": true,
+        "registers": [
+          {
+            "name": "EDX",
+            "value": "0x00000000"
+          },
+          {
+            "name": "EAX",
+            "value": "0x00000800"
+          }
+        ],
+        "isReadDisk": false,
+        "console": "获得磁盘驱动器参数（主要是每磁道的扇区数量）\n"
       },
       {
-        "module": "bootsect",
+        "id": "5",
         "event": "printLoading",
-        "time": 19,
-        "data": {
-          "description": "Loading system …"
-        }
+        "ram": [
+          {
+            "size": "1%",
+            "name": "中断向量表",
+            "addr": "0x00000~0x00400",
+            "color": "#BB8C44"
+          },
+          {
+            "size": "1%",
+            "name": "BIOS数据区",
+            "addr": "0x00400~0x00500",
+            "color": "#FDE74C"
+          },
+          {
+            "size": "40%",
+            "name": "Unknown1",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "2%",
+            "name": "bootsect",
+            "addr": "0x90000~0x90200",
+            "color": "#808695"
+          },
+          {
+            "size": "8%",
+            "name": "setup",
+            "addr": "0x90200~0x90A00",
+            "color": "#2D8CF0"
+          },
+          {
+            "size": "12%",
+            "name": "Unknown2",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "10%",
+            "name": "显示缓冲区",
+            "addr": "0xA0000~0xC0000",
+            "color": "#FA7921"
+          },
+          {
+            "size": "13%",
+            "name": "DEVICE",
+            "addr": "0xC0000~0xF0000",
+            "color": "#E91E63"
+          },
+          {
+            "size": "13%",
+            "name": "ROM BIOS映射区",
+            "addr": "0xC0000~0xF0000",
+            "color": "#673AB7"
+          }
+        ],
+        "isCarry": false,
+        "isChangeRegister": true,
+        "registers": [
+          {
+            "name": "ECX",
+            "value": "0x00000018"
+          },
+          {
+            "name": "EBX",
+            "value": "0x00000007"
+          },
+          {
+            "name": "EAX",
+            "value": "0x00001301"
+          }
+        ],
+        "isReadDisk": false,
+        "console": "打印 “Loading system …”\n"
       },
       {
-        "module": "bootsect",
+        "id": "6",
         "event": "loadSystem",
-        "time": 19,
-        "data": {
-          "description": "加载 system 到 0x10000"
-        }
-      },
+        "ram": [
+          {
+            "size": "1%",
+            "name": "中断向量表",
+            "addr": "0x00000~0x00400",
+            "color": "#BB8C44"
+          },
+          {
+            "size": "1%",
+            "name": "BIOS数据区",
+            "addr": "0x00400~0x00500",
+            "color": "#FDE74C"
+          },
+          {
+            "size": "5%",
+            "name": "Unknown1",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "20%",
+            "name": "system",
+            "addr": "0x10000~",
+            "color": "#19BE6B"
+          },
+          {
+            "size": "15%",
+            "name": "Unknown2",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "2%",
+            "name": "bootsect",
+            "addr": "0x90000~0x90200",
+            "color": "#808695"
+          },
+          {
+            "size": "8%",
+            "name": "setup",
+            "addr": "0x90200~0x90A00",
+            "color": "#2D8CF0"
+          },
+          {
+            "size": "12%",
+            "name": "Unknown3",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "10%",
+            "name": "显示缓冲区",
+            "addr": "0xA0000~0xC0000",
+            "color": "#FA7921"
+          },
+          {
+            "size": "13%",
+            "name": "DEVICE",
+            "addr": "0xC0000~0xF0000",
+            "color": "#E91E63"
+          },
+          {
+            "size": "13%",
+            "name": "ROM BIOS映射区",
+            "addr": "0xC0000~0xF0000",
+            "color": "#673AB7"
+          }
+        ],
+        "isCarry": false,
+        "isChangeRegister": true,
+        "registers": [
+          {
+            "name": "ES",
+            "value": "0x00001000"
+          },
+          {
+            "name": "EAX",
+            "value": "0x00001000"
+          }
+        ],
+        "isReadDisk": true,
+        "console": "加载 system 到 0x10000”\n"
+      }
+    ],
+    "setup": [
       {
-        "module": "bootsect",
-        "event": "rootDeviceNumber",
-        "time": 20,
-        "data": {
-          "description": "确认根文件系统设备号"
-        }
+
       }
     ]
   }
