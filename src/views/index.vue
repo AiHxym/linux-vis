@@ -210,9 +210,6 @@
                     <MenuItem name="headcode" @click.native="getContent('head.S')">
                       head.S
                     </MenuItem>
-                    <MenuItem name="maincode" @click.native="getContent('main.c')">
-                      main.c
-                    </MenuItem>
                   </Menu>
                 </div>
                 <div id="codecontent">
@@ -394,6 +391,10 @@
           {
             name: 'SI',
             value: '0'
+          },
+          {
+            name: 'PC',
+            value: '0'
           }
         ],
         intcolumn: [
@@ -411,7 +412,6 @@
           }
         ],
         intdata: [],
-
         bootborder: "",
         setupborder: "",
         systemborder: "",
@@ -486,7 +486,8 @@
             ++this.now.number;
           } else {
             this.now.index = 1;
-            this.now.number = 0;
+            this.now.number = 1;
+            this.parseEvent(1, 0);
           }
         } else if (this.now.index === 1) {
           if (this.now.number < datas.events.bootsect.length) {
@@ -494,7 +495,8 @@
             ++this.now.number;
           } else {
             this.now.index = 2;
-            this.now.number = 0;
+            this.now.number = 1;
+            this.parseEvent(2, 0);
           }
         } else if (this.now.index === 2) {
           if (this.now.number < datas.events.setup.length) {
@@ -502,7 +504,8 @@
             ++this.now.number;
           } else {
             this.now.index = 3;
-            this.now.number = 0;
+            this.now.number = 1;
+            this.parseEvent(3, 0);
           }
         } else if (this.now.index === 3) {
           if (this.now.number < datas.events.head.length) {
@@ -518,8 +521,8 @@
       lastStep() {
         this.content = "";
         if (this.now.index === 0) {
-          if (this.now.number >= 0) {
-            this.parseEvent(0, this.now.number);
+          if (this.now.number - 1 >= 0) {
+            this.parseEvent(0, this.now.number - 1);
             --this.now.number;
           } else {
             this.now.index = 0;
@@ -527,34 +530,39 @@
             this.messageBox("提示", "已经在最开始部分");
           }
         } else if (this.now.index === 1) {
-          if (this.now.number >= 0) {
-            this.parseEvent(1, this.now.number);
+          if (this.now.number - 1 >= 0) {
+            this.parseEvent(1, this.now.number - 1);
             --this.now.number;
           } else {
             this.now.index = 0;
             this.now.number = datas.events.BIOS.length - 1;
+            this.parseEvent(0, this.now.number);
           }
         } else if (this.now.index === 2) {
-          if (this.now.number >= 0) {
-            this.parseEvent(2, this.now.number);
+          if (this.now.number - 1 >= 0) {
+            this.parseEvent(2, this.now.number - 1);
             --this.now.number;
           } else {
             this.now.index = 1;
             this.now.number = datas.events.bootsect.length - 1;
+            this.parseEvent(1, this.now.number - 1);
           }
         } else if (this.now.index === 3) {
-          if (this.now.number >= 0) {
-            this.parseEvent(3, this.now.number);
+          if (this.now.number - 1 >= 0) {
+            this.parseEvent(3, this.now.number - 1);
             --this.now.number;
           } else {
             this.now.index = 2;
-            this.now.number = datas.events.setup.length;
+            this.now.number = datas.events.setup.length - 1;
+            this.parseEvent(1, this.now.number);
           }
         }
       },
       parseEvent(index, number) {
         var event;
-        if (index === 1) {
+        if (index === 0){
+          event = datas.events.BIOS[number];
+        } else if (index === 1) {
           event = datas.events.bootsect[number];
         } else if (index === 2) {
           event = datas.events.setup[number];
@@ -562,7 +570,7 @@
           event = datas.events.head[number];
         }
         if (event.isInterrupt === true) {
-          this.messageBox("触发中断", event.interruptContent);
+          this.messageBox("触发中断或提示", event.interruptContent);
           this.intdata = event.intdata;
         }
         if (event.isChangeRegister === true) {
@@ -575,7 +583,7 @@
         }
 
         this.logs = event.console;
-        this.moni = event.moni;
+        this.moni += event.moni;
       }
       ,
       readDisk(event) {
@@ -602,6 +610,15 @@
 
         } else if (event.readPlace === "system") {
           this.systemborder = "border: 2px solid red";
+          var tmp = setInterval(() => {
+            if (this.add() === false) {
+              setTimeout(() => this.percent = 0, 500);
+              setTimeout(() => this.setRam(event), 200);
+              this.systemborder = "";
+              clearInterval(tmp);
+            }
+          }, 80);
+        } else{
           var tmp = setInterval(() => {
             if (this.add() === false) {
               setTimeout(() => this.percent = 0, 500);

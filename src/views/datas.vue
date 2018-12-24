@@ -80,7 +80,6 @@
   import datas from '@/assets/mock/data.json'
 
   export default {
-    name: 'test',
     data() {
       return {
         JsonData: datas.events

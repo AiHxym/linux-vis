@@ -1,7 +1,7 @@
 {
   "code": [
     {
-      "name": "bios",
+      "name": "BIOS",
       "content": ""
     },
     {
@@ -22,7 +22,427 @@
     }
   ],
   "events": {
-    "BIOS": [],
+    "BIOS": [
+      {
+        "id": "1",
+        "event": "powerOn",
+        "ram": [],
+        "isCarry": false,
+        "isChangeRegister": false,
+        "isReadDisk": false,
+        "isInterrupt": true,
+        "interruptContent": "电源被按下",
+        "console": "已接通电源\n",
+        "moni": ""
+      },
+      {
+        "id": "2",
+        "event": "originRam",
+        "ram": [
+          {
+            "size": "6.25%",
+            "name": "BIOS",
+            "addr": "0~64KB",
+            "color": "black"
+          },
+          {
+            "size": "18.75%",
+            "name": "reserve memory",
+            "addr": "64~256KB",
+            "color": "yellow"
+          },
+          {
+            "size": "12.5%",
+            "name": "display buffer",
+            "addr": "256~384KB",
+            "color": "green"
+          },
+          {
+            "size": "62.5%",
+            "name": "basic memory",
+            "addr": "384~1024KB",
+            "color": "blue"
+          }
+        ],
+        "isCarry": false,
+        "isChangeRegister": true,
+        "registers": [
+          {
+            "name": "PC",
+            "value": "0xfffffff0"
+          }
+        ],
+        "isReadDisk": false,
+        "isInterrupt": false,
+        "console": "PC设置为BIOS入口地址\n",
+        "moni": ""
+      },
+      {
+        "id": "3",
+        "event": "unzip",
+        "ram": [
+          {
+            "size": "1%",
+            "name": "中断向量表",
+            "addr": "0x00000~0x00400",
+            "color": "#BB8C44"
+          },
+          {
+            "size": "1%",
+            "name": "BIOS数据区",
+            "addr": "0x00400~0x00500",
+            "color": "#FDE74C"
+          },
+          {
+            "size": "62%",
+            "name": "Unknown",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "10%",
+            "name": "显示缓冲区",
+            "addr": "0xA0000~0xC0000",
+            "color": "#FA7921"
+          },
+          {
+            "size": "13%",
+            "name": "DEVICE",
+            "addr": "0xC0000~0xF0000",
+            "color": "#E91E63"
+          },
+          {
+            "size": "13%",
+            "name": "ROM BIOS映射区",
+            "addr": "0xF0000~0x100000",
+            "color": "#673AB7"
+          }
+        ],
+        "isCarry": false,
+        "isChangeRegister": true,
+        "registers": [
+          {
+            "name": "PC",
+            "value": "0"
+          }
+        ],
+        "isReadDisk": true,
+        "readPlace": "",
+        "isInterrupt": false,
+        "console": "将BIOS的中的中断向量表等数据解压到内存的起始位置\n",
+        "moni": ""
+      },
+      {
+        "id": "4",
+        "event": "checkCMOS",
+        "ram": [
+          {
+            "size": "1%",
+            "name": "中断向量表",
+            "addr": "0x00000~0x00400",
+            "color": "#BB8C44"
+          },
+          {
+            "size": "1%",
+            "name": "BIOS数据区",
+            "addr": "0x00400~0x00500",
+            "color": "#FDE74C"
+          },
+          {
+            "size": "62%",
+            "name": "Unknown",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "10%",
+            "name": "显示缓冲区",
+            "addr": "0xA0000~0xC0000",
+            "color": "#FA7921"
+          },
+          {
+            "size": "13%",
+            "name": "DEVICE",
+            "addr": "0xC0000~0xF0000",
+            "color": "#E91E63"
+          },
+          {
+            "size": "13%",
+            "name": "ROM BIOS映射区",
+            "addr": "0xF0000~0x100000",
+            "color": "#673AB7"
+          }
+        ],
+        "isCarry": false,
+        "isChangeRegister": false,
+        "isReadDisk": false,
+        "readPlace": "",
+        "isInterrupt": true,
+        "interruptContent": "检查CMOS",
+        "console": "检查COMS，判断是热启动还是冷启动\n",
+        "moni": ""
+      },
+      {
+        "id": "5",
+        "event": "checkTimer",
+        "ram": [
+          {
+            "size": "1%",
+            "name": "中断向量表",
+            "addr": "0x00000~0x00400",
+            "color": "#BB8C44"
+          },
+          {
+            "size": "1%",
+            "name": "BIOS数据区",
+            "addr": "0x00400~0x00500",
+            "color": "#FDE74C"
+          },
+          {
+            "size": "62%",
+            "name": "Unknown",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "10%",
+            "name": "显示缓冲区",
+            "addr": "0xA0000~0xC0000",
+            "color": "#FA7921"
+          },
+          {
+            "size": "13%",
+            "name": "DEVICE",
+            "addr": "0xC0000~0xF0000",
+            "color": "#E91E63"
+          },
+          {
+            "size": "13%",
+            "name": "ROM BIOS映射区",
+            "addr": "0xF0000~0x100000",
+            "color": "#673AB7"
+          }
+        ],
+        "isCarry": false,
+        "isChangeRegister": false,
+        "isReadDisk": false,
+        "readPlace": "",
+        "isInterrupt": true,
+        "interruptContent": "Timer正常",
+        "console": "检查Timer 是否正常\n",
+        "moni": ""
+      },
+      {
+        "id": "6",
+        "event": "checkGcardR",
+        "ram": [
+          {
+            "size": "1%",
+            "name": "中断向量表",
+            "addr": "0x00000~0x00400",
+            "color": "#BB8C44"
+          },
+          {
+            "size": "1%",
+            "name": "BIOS数据区",
+            "addr": "0x00400~0x00500",
+            "color": "#FDE74C"
+          },
+          {
+            "size": "62%",
+            "name": "Unknown",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "10%",
+            "name": "显示缓冲区",
+            "addr": "0xA0000~0xC0000",
+            "color": "#FA7921"
+          },
+          {
+            "size": "13%",
+            "name": "DEVICE",
+            "addr": "0xC0000~0xF0000",
+            "color": "#E91E63"
+          },
+          {
+            "size": "13%",
+            "name": "ROM BIOS映射区",
+            "addr": "0xF0000~0x100000",
+            "color": "#673AB7"
+          }
+        ],
+        "isCarry": false,
+        "isChangeRegister": false,
+        "isReadDisk": false,
+        "readPlace": "",
+        "isInterrupt": true,
+        "interruptContent": "显卡状态正常",
+        "console": "检查显卡状态寄存器\n",
+        "moni": ""
+      },
+      {
+        "id": "7",
+        "event": "displayBIOSinfo",
+        "ram": [
+          {
+            "size": "1%",
+            "name": "中断向量表",
+            "addr": "0x00000~0x00400",
+            "color": "#BB8C44"
+          },
+          {
+            "size": "1%",
+            "name": "BIOS数据区",
+            "addr": "0x00400~0x00500",
+            "color": "#FDE74C"
+          },
+          {
+            "size": "62%",
+            "name": "Unknown",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "10%",
+            "name": "显示缓冲区",
+            "addr": "0xA0000~0xC0000",
+            "color": "#FA7921"
+          },
+          {
+            "size": "13%",
+            "name": "DEVICE",
+            "addr": "0xC0000~0xF0000",
+            "color": "#E91E63"
+          },
+          {
+            "size": "13%",
+            "name": "ROM BIOS映射区",
+            "addr": "0xF0000~0x100000",
+            "color": "#673AB7"
+          }
+        ],
+        "isCarry": false,
+        "isChangeRegister": false,
+        "isReadDisk": false,
+        "readPlace": "",
+        "isInterrupt": false,
+        "console": "打印BIOS信息\n",
+        "moni": "Bochs BIOS build: 09/22/2016\n\n"
+      },
+      {
+        "id": "8",
+        "event": "displayBIOSinfo",
+        "ram": [
+          {
+            "size": "1%",
+            "name": "中断向量表",
+            "addr": "0x00000~0x00400",
+            "color": "#BB8C44"
+          },
+          {
+            "size": "1%",
+            "name": "BIOS数据区",
+            "addr": "0x00400~0x00500",
+            "color": "#FDE74C"
+          },
+          {
+            "size": "62%",
+            "name": "Unknown",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "10%",
+            "name": "显示缓冲区",
+            "addr": "0xA0000~0xC0000",
+            "color": "#FA7921"
+          },
+          {
+            "size": "13%",
+            "name": "DEVICE",
+            "addr": "0xC0000~0xF0000",
+            "color": "#E91E63"
+          },
+          {
+            "size": "13%",
+            "name": "ROM BIOS映射区",
+            "addr": "0xF0000~0x100000",
+            "color": "#673AB7"
+          }
+        ],
+        "isCarry": false,
+        "isChangeRegister": false,
+        "isReadDisk": false,
+        "readPlace": "",
+        "isInterrupt": true,
+        "interruptContent": "键盘工作正常",
+        "console": "检查键盘是否工作正常\n",
+        "moni": "Press F12 to enter BIOS settings...\n\n"
+      },
+      {
+        "id": "9",
+        "event": "readBootsect",
+        "ram": [
+          {
+            "size": "1%",
+            "name": "中断向量表",
+            "addr": "0x00000~0x00400",
+            "color": "#BB8C44"
+          },
+          {
+            "size": "1%",
+            "name": "BIOS数据区",
+            "addr": "0x00400~0x00500",
+            "color": "#FDE74C"
+          },
+          {
+            "size": "5%",
+            "name": "Unknown1",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "2%",
+            "name": "bootsect",
+            "addr": "0x07C00~0x07E00",
+            "color": "#808695"
+          },
+          {
+            "size": "55%",
+            "name": "Unknown1",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "10%",
+            "name": "显示缓冲区",
+            "addr": "0xA0000~0xC0000",
+            "color": "#FA7921"
+          },
+          {
+            "size": "13%",
+            "name": "DEVICE",
+            "addr": "0xC0000~0xF0000",
+            "color": "#E91E63"
+          },
+          {
+            "size": "13%",
+            "name": "ROM BIOS映射区",
+            "addr": "0xF0000~0x100000",
+            "color": "#673AB7"
+          }
+        ],
+        "isCarry": false,
+        "isChangeRegister": false,
+        "isReadDisk": true,
+        "readPlace": "boot",
+        "isInterrupt": false,
+        "console": "将bootsect读到内存中",
+        "moni": ""
+      }
+    ],
     "bootsect": [
       {
         "id": "1",
@@ -99,7 +519,7 @@
         "registers": [
           {
             "name": "DS",
-            "value": "0X07C0"
+            "value": "0X07c0"
           },
           {
             "name": "ES",
@@ -189,7 +609,7 @@
           },
           {
             "name": "SP",
-            "value": "0xFF00"
+            "value": "0xff00"
           },
           {
             "name": "EAX",
@@ -218,7 +638,7 @@
             "color": "#FDE74C"
           },
           {
-            "size": "42%",
+            "size": "40%",
             "name": "Unknown1",
             "addr": "",
             "color": "#B2EBF2"
@@ -230,7 +650,13 @@
             "color": "#808695"
           },
           {
-            "size": "18%",
+            "size": "8%",
+            "name": "setup",
+            "addr": "0x90200~0x90A00",
+            "color": "#2D8CF0"
+          },
+          {
+            "size": "12%",
             "name": "Unknown2",
             "addr": "",
             "color": "#B2EBF2"
@@ -285,7 +711,7 @@
           },
           {
             "name": "AH",
-            "value": "null",
+            "value": "0x0000",
             "description": "错误返回码。"
           },
           {
@@ -375,32 +801,32 @@
         "intdata": [
           {
             "name": "CF",
-            "value": "0",
+            "value": "0x0000",
             "description": "=0，操作成功；=1，操作失败。"
           },
           {
             "name": "AH",
-            "value": "null",
+            "value": "0x0000",
             "description": "错误返回码"
           },
           {
             "name": "BL",
-            "value": "0x0000",
+            "value": "0x0004",
             "description": "驱动器类型"
           },
           {
             "name": "CH",
-            "value": "0x0000",
+            "value": "0x0009",
             "description": "最大磁道号的[7:0]"
           },
           {
             "name": "CL[7:6]",
-            "value": "0x0000",
+            "value": "0x4",
             "description": "最大磁道号的[9:8]"
           },
           {
             "name": "CL[5:0]",
-            "value": "0x0000",
+            "value": "0xf12",
             "description": "每磁道最大扇区数"
           },
           {
@@ -410,16 +836,16 @@
           },
           {
             "name": "DL",
-            "value": "0x0000",
+            "value": "0x0102",
             "description": "驱动器数量"
           },
           {
             "name": "ES:DI",
-            "value": "0x0000",
+            "value": "0xf000:0xefde",
             "description": "指向软驱磁盘参数表"
           }
         ],
-        "console": "<p>获得磁盘驱动器参数（主要是每磁道的扇区数量</p><p>AH:=08H，读取驱动器参数</p><p>DL:驱动器号（如果是硬盘则[7]=1）</p>",
+        "console": "获得磁盘驱动器参数（主要是每磁道的扇区数量）\n",
         "moni": ""
       },
       {
@@ -499,8 +925,31 @@
         ],
         "isReadDisk": false,
         "isInterrupt": true,
-        "interruptContent": "<p>INT 10H AH=03H：获取光标位置和形状</p><p>INT 10H AH=13H：在Teletype模式下显示字符串</p>",
-        "console": "打印 “Loading system …”\n"
+        "intdata": [
+          {
+            "name": "CH",
+            "value": "0x0009",
+            "description": "行扫描开始"
+          },
+          {
+            "name": "CL",
+            "value": "0x0607",
+            "description": "行扫描结束"
+          },
+          {
+            "name": "DH",
+            "value": "0x0000",
+            "description": "行号"
+          },
+          {
+            "name": "DL",
+            "value": "0x0004",
+            "description": "列号"
+          }
+        ],
+        "interruptContent": "<p>INT 10H AH=03H：获取光标位置和形状</p><p>AH:=03H,读光标的位置</p><p>BH:页号</p><p>INT 10H AH=13H：在Teletype模式下显示字符串</p><p>AH:＝13H，在Teletype模式下显示字符串</p><p>BH:页码</p><p>页码:属性（若 AL=00H 或 01H）</p><p>CX:要显示的字符串的长度</p><p>DH、DL:坐标（行、列）</p><p>ES:BP:指向要显示的字符串</p><p>AL:显示输出方式</p>",
+        "console": "打印 “Loading system …”\n",
+        "moni": "Loading system …\n"
       },
       {
         "id": "6",
@@ -578,7 +1027,7 @@
         "registers": [
           {
             "name": "ES",
-            "value": "0x00001000"
+            "value": "0x1000"
           },
           {
             "name": "EAX",
@@ -588,12 +1037,831 @@
         "isReadDisk": true,
         "readPlace": "system",
         "isInterrupt": false,
-        "console": "加载 system 到 0x10000”\n"
+        "console": "加载 system 到 0x10000”\n",
+        "moni": ""
       }
     ],
     "setup": [
+      {
+        "id": "1",
+        "event": "keepCursor",
+        "ram": [
+          {
+            "size": "1%",
+            "name": "中断向量表",
+            "addr": "0x00000~0x00400",
+            "color": "#BB8C44"
+          },
+          {
+            "size": "1%",
+            "name": "BIOS数据区",
+            "addr": "0x00400~0x00500",
+            "color": "#FDE74C"
+          },
+          {
+            "size": "5%",
+            "name": "Unknown1",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "20%",
+            "name": "system",
+            "addr": "0x10000~",
+            "color": "#19BE6B"
+          },
+          {
+            "size": "15%",
+            "name": "Unknown2",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "2%",
+            "name": "bootsect",
+            "addr": "0x90000~0x90200",
+            "color": "#808695"
+          },
+          {
+            "size": "8%",
+            "name": "setup",
+            "addr": "0x90200~0x90A00",
+            "color": "#2D8CF0"
+          },
+          {
+            "size": "12%",
+            "name": "Unknown3",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "10%",
+            "name": "显示缓冲区",
+            "addr": "0xA0000~0xC0000",
+            "color": "#FA7921"
+          },
+          {
+            "size": "13%",
+            "name": "DEVICE",
+            "addr": "0xC0000~0xF0000",
+            "color": "#E91E63"
+          },
+          {
+            "size": "13%",
+            "name": "ROM BIOS映射区",
+            "addr": "0xF0000~0x100000",
+            "color": "#673AB7"
+          }
+        ],
+        "isCarry": false,
+        "isChangeRegister": true,
+        "registers": [
+          {
+            "name": "EBX",
+            "value": "0x00000000"
+          },
+          {
+            "name": "EAX",
+            "value": "0x00000300"
+          },
+          {
+            "name": "DS",
+            "value": "0x9000"
+          }
+        ],
+        "isReadDisk": false,
+        "isInterrupt": true,
+        "intdata": [
+          {
+            "name": "DH",
+            "value": "0x0000",
+            "description": "行号"
+          },
+          {
+            "name": "DL",
+            "value": "0x1500",
+            "description": "列号"
+          }
+        ],
+        "interruptContent": "<p>INT 10H AH=03H：获取光标位置和形状</p><p>AH:=03H,读光标的位置</p><p>BH:页号</p>",
+        "console": "保存光标的位置\n",
+        "moni": ""
+      },
+      {
+        "id": "2",
+        "event": "keepExpandRam",
+        "ram": [
+          {
+            "size": "1%",
+            "name": "中断向量表",
+            "addr": "0x00000~0x00400",
+            "color": "#BB8C44"
+          },
+          {
+            "size": "1%",
+            "name": "BIOS数据区",
+            "addr": "0x00400~0x00500",
+            "color": "#FDE74C"
+          },
+          {
+            "size": "5%",
+            "name": "Unknown1",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "20%",
+            "name": "system",
+            "addr": "0x10000~",
+            "color": "#19BE6B"
+          },
+          {
+            "size": "15%",
+            "name": "Unknown2",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "2%",
+            "name": "bootsect",
+            "addr": "0x90000~0x90200",
+            "color": "#808695"
+          },
+          {
+            "size": "8%",
+            "name": "setup",
+            "addr": "0x90200~0x90A00",
+            "color": "#2D8CF0"
+          },
+          {
+            "size": "12%",
+            "name": "Unknown3",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "10%",
+            "name": "显示缓冲区",
+            "addr": "0xA0000~0xC0000",
+            "color": "#FA7921"
+          },
+          {
+            "size": "13%",
+            "name": "DEVICE",
+            "addr": "0xC0000~0xF0000",
+            "color": "#E91E63"
+          },
+          {
+            "size": "13%",
+            "name": "ROM BIOS映射区",
+            "addr": "0xF0000~0x100000",
+            "color": "#673AB7"
+          }
+        ],
+        "isCarry": false,
+        "isChangeRegister": true,
+        "registers": [
+          {
+            "name": "EAX",
+            "value": "0x00008800"
+          }
+        ],
+        "isReadDisk": false,
+        "isInterrupt": true,
+        "intdata": [
+          {
+            "name": "AX",
+            "value": "0x3c00",
+            "description": "从1M处开始的扩展内存大小"
+          }
+        ],
+        "interruptContent": "<p>INT 15H AH=88H：获取从 1M 处开始的扩展内存大小</p><p>AH:=88H,取系统所含扩展内存大小，并保存在内存 0x90002 处</p>",
+        "console": "获取从 1M 处开始的扩展内存大小\n",
+        "moni": ""
+      },
+      {
+        "id": "3",
+        "event": "getDisplayMode",
+        "ram": [
+          {
+            "size": "1%",
+            "name": "中断向量表",
+            "addr": "0x00000~0x00400",
+            "color": "#BB8C44"
+          },
+          {
+            "size": "1%",
+            "name": "BIOS数据区",
+            "addr": "0x00400~0x00500",
+            "color": "#FDE74C"
+          },
+          {
+            "size": "5%",
+            "name": "Unknown1",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "20%",
+            "name": "system",
+            "addr": "0x10000~",
+            "color": "#19BE6B"
+          },
+          {
+            "size": "15%",
+            "name": "Unknown2",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "2%",
+            "name": "bootsect",
+            "addr": "0x90000~0x90200",
+            "color": "#808695"
+          },
+          {
+            "size": "8%",
+            "name": "setup",
+            "addr": "0x90200~0x90A00",
+            "color": "#2D8CF0"
+          },
+          {
+            "size": "12%",
+            "name": "Unknown3",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "10%",
+            "name": "显示缓冲区",
+            "addr": "0xA0000~0xC0000",
+            "color": "#FA7921"
+          },
+          {
+            "size": "13%",
+            "name": "DEVICE",
+            "addr": "0xC0000~0xF0000",
+            "color": "#E91E63"
+          },
+          {
+            "size": "13%",
+            "name": "ROM BIOS映射区",
+            "addr": "0xF0000~0x100000",
+            "color": "#673AB7"
+          }
+        ],
+        "isCarry": false,
+        "isChangeRegister": true,
+        "registers": [
+          {
+            "name": "EAX",
+            "value": "0x00000f00"
+          }
+        ],
+        "isReadDisk": false,
+        "isInterrupt": true,
+        "intdata": [
+          {
+            "name": "AH",
+            "value": "0x50",
+            "description": "字符列数"
+          },
+          {
+            "name": "AL",
+            "value": "0x03",
+            "description": "显示模式"
+          },
+          {
+            "name": "BH",
+            "value": "0x00",
+            "description": "当前显示页"
+          }
+        ],
+        "interruptContent": "<p>INT 10H AH=0FH：获取显示卡当前的显示模式</p><p>AH:=0FH,获取显示卡当前的显示模式</p>",
+        "console": "获取显示卡当前的显示模式\n",
+        "moni": ""
+      },
+      {
+        "id": "4",
+        "event": "loadSystem",
+        "ram": [
+          {
+            "size": "1%",
+            "name": "中断向量表",
+            "addr": "0x00000~0x00400",
+            "color": "#BB8C44"
+          },
+          {
+            "size": "1%",
+            "name": "BIOS数据区",
+            "addr": "0x00400~0x00500",
+            "color": "#FDE74C"
+          },
+          {
+            "size": "5%",
+            "name": "Unknown1",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "20%",
+            "name": "system",
+            "addr": "0x10000~",
+            "color": "#19BE6B"
+          },
+          {
+            "size": "15%",
+            "name": "Unknown2",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "2%",
+            "name": "bootsect",
+            "addr": "0x90000~0x90200",
+            "color": "#808695"
+          },
+          {
+            "size": "8%",
+            "name": "setup",
+            "addr": "0x90200~0x90A00",
+            "color": "#2D8CF0"
+          },
+          {
+            "size": "12%",
+            "name": "Unknown3",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "10%",
+            "name": "显示缓冲区",
+            "addr": "0xA0000~0xC0000",
+            "color": "#FA7921"
+          },
+          {
+            "size": "13%",
+            "name": "DEVICE",
+            "addr": "0xC0000~0xF0000",
+            "color": "#E91E63"
+          },
+          {
+            "size": "13%",
+            "name": "ROM BIOS映射区",
+            "addr": "0xF0000~0x100000",
+            "color": "#673AB7"
+          }
+        ],
+        "isCarry": false,
+        "isChangeRegister": false,
+        "isReadDisk": false,
+        "isInterrupt": true,
+        "interruptContent": "关中断",
+        "console": "关中断",
+        "moni": ""
+      },
+      {
+        "id": "5",
+        "event": "carrySystem",
+        "ram": [
+          {
+            "size": "0%",
+            "name": "System(搬运后)",
+            "addr": "0x00000~",
+            "color": "#19BE6B"
+          },
+          {
+            "size": "7%",
+            "name": "Unknown1",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "20%",
+            "name": "system",
+            "addr": "0x10000~",
+            "color": "#19BE6B"
+          },
+          {
+            "size": "15%",
+            "name": "Unknown2",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "2%",
+            "name": "bootsect",
+            "addr": "0x90000~0x90200",
+            "color": "#808695"
+          },
+          {
+            "size": "8%",
+            "name": "setup",
+            "addr": "0x90200~0x90A00",
+            "color": "#2D8CF0"
+          },
+          {
+            "size": "12%",
+            "name": "Unknown3",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "10%",
+            "name": "显示缓冲区",
+            "addr": "0xA0000~0xC0000",
+            "color": "#FA7921"
+          },
+          {
+            "size": "13%",
+            "name": "DEVICE",
+            "addr": "0xC0000~0xF0000",
+            "color": "#E91E63"
+          },
+          {
+            "size": "13%",
+            "name": "ROM BIOS映射区",
+            "addr": "0xF0000~0x100000",
+            "color": "#673AB7"
+          }
+        ],
+        "isCarry": true,
+        "carry": {
+          "from": 2,
+          "to": 0,
+          "times": 256
+        },
+        "isChangeRegister": true,
+        "registers": [
+          {
+            "name": "DS",
+            "value": "0X2000"
+          },
+          {
+            "name": "ES",
+            "value": "0x1000"
+          },
+          {
+            "name": "ECX",
+            "value": "0x00008000"
+          },
+          {
+            "name": "EAX",
+            "value": "0x00001000"
+          }
+        ],
+        "isReadDisk": false,
+        "isInterrupt": false,
+        "console": "移动 system 模块到 0x00000\n",
+        "moni": ""
+      },
+      {
+        "id": "6",
+        "event": "loadIDT",
+        "ram": [
+          {
+            "size": "20%",
+            "name": "System",
+            "addr": "0x00000~",
+            "color": "#19BE6B"
+          },
+          {
+            "size": "22%",
+            "name": "Unknown1",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "2%",
+            "name": "bootsect",
+            "addr": "0x90000~0x90200",
+            "color": "#808695"
+          },
+          {
+            "size": "8%",
+            "name": "setup",
+            "addr": "0x90200~0x90A00",
+            "color": "#2D8CF0"
+          },
+          {
+            "size": "12%",
+            "name": "Unknown2",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "10%",
+            "name": "显示缓冲区",
+            "addr": "0xA0000~0xC0000",
+            "color": "#FA7921"
+          },
+          {
+            "size": "13%",
+            "name": "DEVICE",
+            "addr": "0xC0000~0xF0000",
+            "color": "#E91E63"
+          },
+          {
+            "size": "13%",
+            "name": "ROM BIOS映射区",
+            "addr": "0xF0000~0x100000",
+            "color": "#673AB7"
+          }
+        ],
+        "isCarry": false,
+        "isChangeRegister": true,
+        "registers": [
+          {
+            "name": "DS",
+            "value": "0x9020"
+          },
+          {
+            "name": "EAX",
+            "value": "0x00009020"
+          }
+        ],
+        "isReadDisk": false,
+        "isInterrupt": true,
+        "interruptContent": "加载IDT(中断描述表)",
+        "console": "加载IDT(中断描述表)",
+        "moni": ""
+      },
+      {
+        "id": "7",
+        "event": "loadGDT",
+        "ram": [
+          {
+            "size": "20%",
+            "name": "System",
+            "addr": "0x00000~",
+            "color": "#19BE6B"
+          },
+          {
+            "size": "22%",
+            "name": "Unknown1",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "2%",
+            "name": "bootsect",
+            "addr": "0x90000~0x90200",
+            "color": "#808695"
+          },
+          {
+            "size": "8%",
+            "name": "setup",
+            "addr": "0x90200~0x90A00",
+            "color": "#2D8CF0"
+          },
+          {
+            "size": "12%",
+            "name": "Unknown2",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "10%",
+            "name": "显示缓冲区",
+            "addr": "0xA0000~0xC0000",
+            "color": "#FA7921"
+          },
+          {
+            "size": "13%",
+            "name": "DEVICE",
+            "addr": "0xC0000~0xF0000",
+            "color": "#E91E63"
+          },
+          {
+            "size": "13%",
+            "name": "ROM BIOS映射区",
+            "addr": "0xF0000~0x100000",
+            "color": "#673AB7"
+          }
+        ],
+        "isCarry": false,
+        "isChangeRegister": false,
+        "isReadDisk": false,
+        "isInterrupt": true,
+        "interruptContent": "加载GDT(全局描述符表)",
+        "console": "加载GDT(全局描述符表)",
+        "moni": ""
+      },
+      {
+        "id": "7",
+        "event": "openA20",
+        "ram": [
+          {
+            "size": "20%",
+            "name": "System",
+            "addr": "0x00000~",
+            "color": "#19BE6B"
+          },
+          {
+            "size": "22%",
+            "name": "Unknown1",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "2%",
+            "name": "bootsect",
+            "addr": "0x90000~0x90200",
+            "color": "#808695"
+          },
+          {
+            "size": "8%",
+            "name": "setup",
+            "addr": "0x90200~0x90A00",
+            "color": "#2D8CF0"
+          },
+          {
+            "size": "12%",
+            "name": "Unknown2",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "10%",
+            "name": "显示缓冲区",
+            "addr": "0xA0000~0xC0000",
+            "color": "#FA7921"
+          },
+          {
+            "size": "13%",
+            "name": "DEVICE",
+            "addr": "0xC0000~0xF0000",
+            "color": "#E91E63"
+          },
+          {
+            "size": "13%",
+            "name": "ROM BIOS映射区",
+            "addr": "0xF0000~0x100000",
+            "color": "#673AB7"
+          }
+        ],
+        "isCarry": false,
+        "isChangeRegister": false,
+        "isReadDisk": false,
+        "isInterrupt": true,
+        "interruptContent": "<p>开启A20</p><p>通过8042 P2 PORT</p>",
+        "console": "开启A20，扩大寻址能力",
+        "moni": ""
+      },
+      {
+        "id": "7",
+        "event": "enterProtectMode",
+        "ram": [
+          {
+            "size": "20%",
+            "name": "System",
+            "addr": "0x00000~",
+            "color": "#19BE6B"
+          },
+          {
+            "size": "22%",
+            "name": "Unknown1",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "2%",
+            "name": "bootsect",
+            "addr": "0x90000~0x90200",
+            "color": "#808695"
+          },
+          {
+            "size": "8%",
+            "name": "setup",
+            "addr": "0x90200~0x90A00",
+            "color": "#2D8CF0"
+          },
+          {
+            "size": "12%",
+            "name": "Unknown2",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "10%",
+            "name": "显示缓冲区",
+            "addr": "0xA0000~0xC0000",
+            "color": "#FA7921"
+          },
+          {
+            "size": "13%",
+            "name": "DEVICE",
+            "addr": "0xC0000~0xF0000",
+            "color": "#E91E63"
+          },
+          {
+            "size": "13%",
+            "name": "ROM BIOS映射区",
+            "addr": "0xF0000~0x100000",
+            "color": "#673AB7"
+          }
+        ],
+        "isCarry": false,
+        "isChangeRegister": true,
+        "registers": [
+          {
+            "name": "EAX",
+            "value": "0x00009020"
+          }
+        ],
+        "isReadDisk": false,
+        "isInterrupt": true,
+        "interruptContent": "保护模式已进入",
+        "console": "保护模式已进入",
+        "moni": ""
+      }
     ],
     "head": [
+      {
+        "id": "1",
+        "event": "beginPaging",
+        "ram": [
+          {
+            "size": "1%",
+            "name": "页表1",
+            "addr": "0x1000~0x2000",
+            "color": "#2D3047"
+          },
+          {
+            "size": "1%",
+            "name": "页表2",
+            "addr": "0x2000~0x3000",
+            "color": "#BB8C44"
+          },
+          {
+            "size": "1%",
+            "name": "页表3",
+            "addr": "0x3000~0x4000",
+            "color": "#FF9B71"
+          },
+          {
+            "size": "1%",
+            "name": "页表4",
+            "addr": "0x4000~0x5000",
+            "color": "#E84855"
+          },
+          {
+            "size": "16%",
+            "name": "System",
+            "addr": "0x00000~",
+            "color": "#19BE6B"
+          },
+          {
+            "size": "22%",
+            "name": "Unknown1",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "2%",
+            "name": "bootsect",
+            "addr": "0x90000~0x90200",
+            "color": "#808695"
+          },
+          {
+            "size": "8%",
+            "name": "setup",
+            "addr": "0x90200~0x90A00",
+            "color": "#2D8CF0"
+          },
+          {
+            "size": "12%",
+            "name": "Unknown2",
+            "addr": "",
+            "color": "#B2EBF2"
+          },
+          {
+            "size": "10%",
+            "name": "显示缓冲区",
+            "addr": "0xA0000~0xC0000",
+            "color": "#FA7921"
+          },
+          {
+            "size": "13%",
+            "name": "DEVICE",
+            "addr": "0xC0000~0xF0000",
+            "color": "#E91E63"
+          },
+          {
+            "size": "13%",
+            "name": "ROM BIOS映射区",
+            "addr": "0xF0000~0x100000",
+            "color": "#673AB7"
+          }
+        ],
+        "isCarry": false,
+        "isChangeRegister": false,
+        "isReadDisk": false,
+        "isInterrupt": true,
+        "interruptContent": "开启分页，设置了5个页表",
+        "console": "开启分页，跳转到 main()",
+        "moni": ""
+      }
     ]
   }
 }
