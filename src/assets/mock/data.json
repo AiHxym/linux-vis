@@ -116,7 +116,8 @@
         ],
         "isReadDisk": false,
         "isInterrupt": false,
-        "console": "bootsect 把自己搬运到 0x90000，并跳转\n"
+        "console": "bootsect 把自己搬运到 0x90000，并跳转\n从ds:si处(物理地址0x7c00)的内容搬运到es:di(物理地址0x90000)\n搬运了256次\n每次搬运两个字节",
+        "moni": ""
       },
       {
         "id": "2",
@@ -197,7 +198,8 @@
         ],
         "isReadDisk": false,
         "isInterrupt": false,
-        "console": "设置堆栈的指针\n"
+        "console": "设置ds,es,ss和sp\n设置堆栈的指针\nes:sp = 0x9000:0xff00 ，栈的设置",
+        "moni": ""
       },
       {
         "id": "3",
@@ -216,7 +218,7 @@
             "color": "#FDE74C"
           },
           {
-            "size": "40%",
+            "size": "42%",
             "name": "Unknown1",
             "addr": "",
             "color": "#B2EBF2"
@@ -228,13 +230,7 @@
             "color": "#808695"
           },
           {
-            "size": "8%",
-            "name": "setup",
-            "addr": "0x90200~0x90A00",
-            "color": "#2D8CF0"
-          },
-          {
-            "size": "12%",
+            "size": "18%",
             "name": "Unknown2",
             "addr": "",
             "color": "#B2EBF2"
@@ -281,8 +277,26 @@
         "isReadDisk": true,
         "readPlace": "setup",
         "isInterrupt": true,
-        "interruptContent": "INT 13H AH=02H：读扇区",
-        "console": "加载 setup 模块到 0x90200\n"
+        "intdata": [
+          {
+            "name": "CF",
+            "value": "0",
+            "description": "=0，操作成功；=1，操作失败。"
+          },
+          {
+            "name": "AH",
+            "value": "null",
+            "description": "错误返回码。"
+          },
+          {
+            "name": "AL",
+            "value": "0x0004",
+            "description": "实际读到的扇区数。"
+          }
+        ],
+        "interruptContent": "<p>INT 13H AH=02H：读扇区</p><p>AL:要读的扇区数目，不允许使用读磁道末端以外的数值，也不允许使该寄存器为0。</p><p>DL:需要进行读操作的驱动器号，0表示软盘，80H表示硬盘。</p><p>DH:所读磁盘的磁头号。</p><p>CH:磁道号的低8位数（磁道号共10位）。</p><p>CL:低5位放入所读起始扇区号，位7-6表示磁道号的高2位。</p><p>ES:BX:读出数据的缓冲区地址。</p>",
+        "console": "加载 setup 模块到 0x90200\n",
+        "moni": ""
       },
       {
         "id": "4",
@@ -358,7 +372,55 @@
         "isReadDisk": false,
         "isInterrupt": true,
         "interruptContent": "INT 13H AH=08H：读取驱动器参数",
-        "console": "获得磁盘驱动器参数（主要是每磁道的扇区数量）\n"
+        "intdata": [
+          {
+            "name": "CF",
+            "value": "0",
+            "description": "=0，操作成功；=1，操作失败。"
+          },
+          {
+            "name": "AH",
+            "value": "null",
+            "description": "错误返回码"
+          },
+          {
+            "name": "BL",
+            "value": "0x0000",
+            "description": "驱动器类型"
+          },
+          {
+            "name": "CH",
+            "value": "0x0000",
+            "description": "最大磁道号的[7:0]"
+          },
+          {
+            "name": "CL[7:6]",
+            "value": "0x0000",
+            "description": "最大磁道号的[9:8]"
+          },
+          {
+            "name": "CL[5:0]",
+            "value": "0x0000",
+            "description": "每磁道最大扇区数"
+          },
+          {
+            "name": "DH",
+            "value": "0x0000",
+            "description": "最大磁头数"
+          },
+          {
+            "name": "DL",
+            "value": "0x0000",
+            "description": "驱动器数量"
+          },
+          {
+            "name": "ES:DI",
+            "value": "0x0000",
+            "description": "指向软驱磁盘参数表"
+          }
+        ],
+        "console": "<p>获得磁盘驱动器参数（主要是每磁道的扇区数量</p><p>AH:=08H，读取驱动器参数</p><p>DL:驱动器号（如果是硬盘则[7]=1）</p>",
+        "moni": ""
       },
       {
         "id": "5",

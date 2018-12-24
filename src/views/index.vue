@@ -1,12 +1,12 @@
 <style>
   #mainview {
     margin: 30px 0 30px 0;
-    height: 25cm;
+    min-height: 28cm;
   }
 
   #upper {
     margin: 0 0 20px 0;
-    height: 60%;
+    height: 100%;
   }
 
   #leftarea {
@@ -23,7 +23,7 @@
 
   #logger {
     margin-top: 20px;
-    height: 25%;
+    height: 30%;
     width: 100%;
   }
 
@@ -95,8 +95,7 @@
   }
 
   #interruptres{
-    margin: 0 8% 0 12%;
-
+    margin: 0 8% 80px 12%;
   }
 
   #buttonbar {
@@ -408,7 +407,7 @@
           },
           {
             title: '说明',
-            key: 'explanation'
+            key: 'description'
           }
         ],
         intdata: [],
@@ -575,7 +574,7 @@
           this.setRam(event);
         }
 
-        this.logs += event.console;
+        this.logs = event.console;
         this.moni = event.moni;
       }
       ,
