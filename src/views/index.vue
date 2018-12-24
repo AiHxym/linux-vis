@@ -94,6 +94,11 @@
     float: left;
   }
 
+  #interruptres{
+    margin: 0 8% 0 12%;
+
+  }
+
   #buttonbar {
     margin-bottom: 10px;
     width: 100%;
@@ -212,9 +217,9 @@
                   </Menu>
                 </div>
                 <div id="codecontent">
-                <pre v-highlightjs="content"
-                     style="background-color: rgba(0, 0, 0, 0);color: #444444;overflow: visible; height: auto">
-                  <code class="assembly cpp"
+                   <pre v-highlightjs="content"
+                        style="background-color: rgba(0, 0, 0, 0);color: #444444;overflow: visible; height: auto">
+                  <code class=""
                         style="background-color: rgba(0, 0, 0, 0);color: #444444;overflow: visible; height: auto"></code>
                 </pre>
                 </div>
@@ -283,10 +288,13 @@
                            style="background-color: #19be6b; width: 49.5%; height: 100%; float:left;"></Tooltip>
                 </div>
               </div>
-            </div>
-          </div>
-          <div id="lower">
 
+              <h2 style="margin-top: 30px; margin-bottom: 5px">中断返回内容</h2>
+              <div id="interruptres">
+                <Table border stripe :columns="intcolumn" :data="intdata">
+                </Table>
+              </div>
+            </div>
 
           </div>
         </div>
@@ -303,6 +311,7 @@
   export default {
     data() {
       return {
+        moni: "",
         logs: "",
         iconStatus: "ios-play",
         percent: 0,
@@ -388,6 +397,22 @@
             value: '0'
           }
         ],
+        intcolumn: [
+          {
+            title: '参数',
+            key: 'name'
+          },
+          {
+            title: '内容',
+            key: 'value'
+          },
+          {
+            title: '说明',
+            key: 'explanation'
+          }
+        ],
+        intdata: [],
+
         bootborder: "",
         setupborder: "",
         systemborder: "",
@@ -433,6 +458,7 @@
           clearInterval(mainproc);
         } else {
           this.iconStatus = "ios-pause";
+          this.content = "";
           clearInterval(mainproc);
           if (this.now.index === 1) {
             if (this.now.number < datas.events.bootsect.length) {
@@ -454,12 +480,13 @@
       }
       ,
       nextStep() {
+        this.content = "";
         if (this.now.index === 0) {
           if (this.now.number < datas.events.BIOS.length) {
             this.parseEvent(0, this.now.number);
             ++this.now.number;
           } else {
-            this.now.index = 2;
+            this.now.index = 1;
             this.now.number = 0;
           }
         } else if (this.now.index === 1) {
@@ -490,6 +517,7 @@
         }
       },
       lastStep() {
+        this.content = "";
         if (this.now.index === 0) {
           if (this.now.number >= 0) {
             this.parseEvent(0, this.now.number);
@@ -526,26 +554,29 @@
         }
       },
       parseEvent(index, number) {
+        var event;
         if (index === 1) {
-          var event = datas.events.bootsect[number];
-          if (event.isInterrupt === true) {
-            this.messageBox("触发中断", event.interruptContent);
-          }
-          if (event.isChangeRegister === true) {
-            this.setRegisters(event);
-          }
-          if (event.isReadDisk === true) {
-            this.readDisk(event);
-          } else {
-            this.setRam(event);
-          }
-          this.logs += event.console;
+          event = datas.events.bootsect[number];
         } else if (index === 2) {
-
+          event = datas.events.setup[number];
         } else if (index === 3) {
-
+          event = datas.events.head[number];
+        }
+        if (event.isInterrupt === true) {
+          this.messageBox("触发中断", event.interruptContent);
+          this.intdata = event.intdata;
+        }
+        if (event.isChangeRegister === true) {
+          this.setRegisters(event);
+        }
+        if (event.isReadDisk === true) {
+          this.readDisk(event);
+        } else {
+          this.setRam(event);
         }
 
+        this.logs += event.console;
+        this.moni = event.moni;
       }
       ,
       readDisk(event) {
@@ -553,33 +584,33 @@
           this.bootborder = "border: 2px solid red";
           var tmp = setInterval(() => {
             if (this.add() === false) {
-              this.percent = 0;
+              setTimeout(() => this.percent = 0, 500);
               setTimeout(() => this.setRam(event), 200);
               this.bootborder = "";
               clearInterval(tmp);
             }
-          }, 50);
+          }, 80);
         } else if (event.readPlace === "setup") {
           this.setupborder = "border: 2px solid red";
           var tmp = setInterval(() => {
             if (this.add() === false) {
-              this.percent = 0;
+              setTimeout(() => this.percent = 0, 500);
               setTimeout(() => this.setRam(event), 200);
               this.setupborder = "";
               clearInterval(tmp);
             }
-          }, 50);
+          }, 80);
 
         } else if (event.readPlace === "system") {
           this.systemborder = "border: 2px solid red";
           var tmp = setInterval(() => {
             if (this.add() === false) {
-              this.percent = 0;
+              setTimeout(() => this.percent = 0, 500);
               setTimeout(() => this.setRam(event), 200);
               this.systemborder = "";
               clearInterval(tmp);
             }
-          }, 50);
+          }, 80);
         }
       }
       ,

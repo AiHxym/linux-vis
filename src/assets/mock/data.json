@@ -22,34 +22,7 @@
     }
   ],
   "events": {
-    "BIOS": [
-      {
-        "module": "startup",
-        "event": "pressButton",
-        "time": 1
-      },
-      {
-        "module": "startup",
-        "event": "initialRegister",
-        "time": 2
-      },
-      {
-        "module": "BIOS",
-        "event": "jmp",
-        "time": 3,
-        "data": {
-          "description": "从入口地址跳转到BIOS的起始地址开始执行"
-        }
-      },
-      {
-        "module": "BIOS",
-        "event": "unzip",
-        "time": 4,
-        "data": {
-          "description": "将常驻程序库解压到内存中去"
-        }
-      }
-    ],
+    "BIOS": [],
     "bootsect": [
       {
         "id": "1",
@@ -162,7 +135,7 @@
             "color": "#FDE74C"
           },
           {
-            "size": "40%",
+            "size": "42%",
             "name": "Unknown1",
             "addr": "",
             "color": "#B2EBF2"
@@ -174,7 +147,7 @@
             "color": "#808695"
           },
           {
-            "size": "20%",
+            "size": "18%",
             "name": "Unknown2",
             "addr": "",
             "color": "#B2EBF2"
