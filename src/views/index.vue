@@ -459,21 +459,9 @@
           this.iconStatus = "ios-pause";
           this.content = "";
           clearInterval(mainproc);
-          if (this.now.index === 1) {
-            if (this.now.number < datas.events.bootsect.length) {
-              this.parseEvent(1, this.now.number);
-              ++this.now.number;
-            }
-          }
+          this.nextStep();
           mainproc = setInterval(() => {
-            if (this.now.index === 1) {
-              if (this.now.number < datas.events.bootsect.length) {
-                this.parseEvent(1, this.now.number);
-                ++this.now.number;
-              } else {
-                ++this.now.index;
-              }
-            }
+            this.nextStep();
           }, 8000);
         }
       }
