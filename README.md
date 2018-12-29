@@ -1,6 +1,8 @@
-# linux-vis
+# linux-vis 编译使用说明
 
 > A Vue.js project
+>
+> 请先安装node.js及npm
 
 ## Build Setup
 

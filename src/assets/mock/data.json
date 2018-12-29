@@ -1858,7 +1858,7 @@
         "isChangeRegister": false,
         "isReadDisk": false,
         "isInterrupt": true,
-        "interruptContent": "开启分页，设置了5个页表",
+        "interruptContent": "开启分页，设置了4个页表",
         "console": "开启分页，跳转到 main()",
         "moni": ""
       }
