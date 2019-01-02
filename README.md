@@ -1,4 +1,6 @@
-# linux-vis 编译使用说明
+# 在线演示地址
+aihxym.cn
+# linux-vis 本地测试编译使用说明
 
 > A Vue.js project
 >
