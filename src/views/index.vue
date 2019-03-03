@@ -191,7 +191,7 @@
               <div id="buttonbar">
                 <ButtonGroup shape="circle" style="margin: 0 auto; display: table">
                   <Button type="default" icon="ios-skip-backward" @click="lastStep"></Button>
-                  <Button type="default" icon="ios-play" v-bind:icon="iconStatus" @click="start"></Button>
+                  <Button type="default" v-bind:icon="iconStatus" @click="start"></Button>
                   <Button type="default" icon="ios-skip-forward" @click="nextStep"></Button>
                 </ButtonGroup>
               </div>
